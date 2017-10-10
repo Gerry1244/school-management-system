@@ -20,6 +20,9 @@ public class Assignment {
 	@ManyToOne
 	Teacher teacher;
 	
+	@ManyToMany
+	List<Grade> grades;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;

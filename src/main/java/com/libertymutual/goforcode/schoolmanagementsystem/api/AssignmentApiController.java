@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
 
 import io.swagger.annotations.Api;
@@ -59,6 +60,18 @@ public class AssignmentApiController {
 	public Assignment update(@RequestBody Assignment assignment, @PathVariable long id) {
 		assignment.setId(id);
 		return assignmentRepo.save(assignment);
+	}
+	
+	@ApiOperation(value = "Get a list of students assigned to a particular assignment.")
+	@GetMapping("{id}")
+	public List<Student> getAllStudentsByAssignment(@PathVariable long id) {
+		try {
+			Assignment individualAssignment = assignmentRepo.findOne(id);
+			List<Student> studentList = individualAssignment.getStudents();
+			return studentList;
+		} catch (EmptyResultDataAccessException erdae) {
+			return null;
+		}
 	}
 
 }

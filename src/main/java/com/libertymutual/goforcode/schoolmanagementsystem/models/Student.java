@@ -15,6 +15,9 @@ public class Student extends User {
 	@ManyToMany(mappedBy = "students")
 	List<Assignment> assignments;
 	
+	@ManyToMany
+	List<Grade> grades;
+	
 	@ManyToOne
 	Teacher teacher;
 	
