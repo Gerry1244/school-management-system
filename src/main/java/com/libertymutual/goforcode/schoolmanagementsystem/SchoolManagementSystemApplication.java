@@ -2,6 +2,7 @@ package com.libertymutual.goforcode.schoolmanagementsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Admin;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
@@ -12,14 +13,14 @@ import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRe
 
 @SpringBootApplication
 public class SchoolManagementSystemApplication {
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(SchoolManagementSystemApplication.class, args);
 	}
-	
-	public SchoolManagementSystemApplication(StudentRepository studentRepo, TeacherRepository teacherRepo, AdminRepository adminRepo) {
-		studentRepo.save(new Student("Richard", "Sandoval", "rs@gmail.com", "password", 5));
-		teacherRepo.save(new Teacher("Gary", "Gossage", "gg@gmail.com", "salad", 7));
-		adminRepo.save(new Admin("Mary", "Richards", "mr@gmail.com", "password"));
+
+	public SchoolManagementSystemApplication(PasswordEncoder encoder, StudentRepository studentRepo, TeacherRepository teacherRepo, AdminRepository adminRepo) {
+		studentRepo.save(new Student("Richard", "Sandoval", "rs@gmail.com", encoder.encode("password"), 5));
+		teacherRepo.save(new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 7));
+		adminRepo.save(new Admin("Mary", "Richards", "mr@gmail.com", encoder.encode("password")));
 	}
 }

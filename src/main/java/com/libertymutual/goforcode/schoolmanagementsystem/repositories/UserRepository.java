@@ -9,4 +9,5 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.User;
 public interface UserRepository extends JpaRepository<User, Long>{
 	
 	User findByEmail(String email);
+	User findByPassword(String password);
 }
