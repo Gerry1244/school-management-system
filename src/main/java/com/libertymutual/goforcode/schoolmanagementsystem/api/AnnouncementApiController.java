@@ -15,26 +15,34 @@ import org.springframework.web.bind.annotation.RestController;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Announcement;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AnnouncementRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api/announcements")
+@Api(description="Use this to get all, create, delete, and update announcements.")
 public class AnnouncementApiController {
 	
 	private AnnouncementRepository announcementRepo;
 	
 	public AnnouncementApiController(AnnouncementRepository announcementRepo) {
 		this.announcementRepo = announcementRepo;
+		announcementRepo.save(new Announcement("drawing", "draw some shit"));
 	}
 	
+	@ApiOperation(value = "Get a list of all of the announcements.")
 	@GetMapping("")
 	public List<Announcement> getAll() {
 		return announcementRepo.findAll();
 	}
 	
+	@ApiOperation(value = "Create a new announcement.")
 	@PostMapping("")
 	public Announcement create(@RequestBody Announcement announcement) {
 		return announcementRepo.save(announcement);
 	}
 	
+	@ApiOperation(value = "Delete an announcement.")
 	@DeleteMapping("{id}")
 	public Announcement delete(@PathVariable long id) {
 		try {
@@ -46,6 +54,7 @@ public class AnnouncementApiController {
 		}
 	}
 
+	@ApiOperation(value = "Update an announcement.")
 	@PutMapping("{id}")
 	public Announcement update(@RequestBody Announcement announcement, @PathVariable long id) {
 		announcement.setId(id);

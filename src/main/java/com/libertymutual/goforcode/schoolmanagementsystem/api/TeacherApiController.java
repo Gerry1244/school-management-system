@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api/teachers")
+@Api(description="Use this to get all, create, delete, and update teachers.")
 public class TeacherApiController {
 	
 	private TeacherRepository teacherRepo;
@@ -25,16 +29,19 @@ public class TeacherApiController {
 		this.teacherRepo = teacherRepo;
 	}
 	
+	@ApiOperation(value = "Get a list of teachers.")
 	@GetMapping("")
 	public List<Teacher> getAll() {
 		return teacherRepo.findAll();
 	}
 	
+	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("")
 	public Teacher create(@RequestBody Teacher teacher) {
 		return teacherRepo.save(teacher);
 	}
 	
+	@ApiOperation(value = "Delete a teacher.")
 	@DeleteMapping("{id}")
 	public Teacher delete(@PathVariable long id) {
 		try {
@@ -46,6 +53,7 @@ public class TeacherApiController {
 		}
 	}
 
+	@ApiOperation(value = "Update a teacher.")
 	@PutMapping("{id}")
 	public Teacher update(@RequestBody Teacher teacher, @PathVariable long id) {
 		teacher.setId(id);

@@ -16,8 +16,12 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api/students")
+@Api(description="Use this to get all, create, delete, and update students. This controller also handles getting assignments by student id.")
 public class StudentApiController {
 
 	private StudentRepository studentRepo;
@@ -26,6 +30,7 @@ public class StudentApiController {
 		this.studentRepo = studentRepo;
 	}
 
+	@ApiOperation(value = "Get a list of all of the assignments by student id.")
 	@GetMapping("{id}/assignments")
 	public List<Assignment> getAllAssignmentsByStudent(@PathVariable long id) {
 		try {
@@ -37,16 +42,19 @@ public class StudentApiController {
 		}
 	}
 	
+	@ApiOperation(value = "Get a list of all of the assignments.")
 	@GetMapping("")
 	public List<Student> getAll() {
 		return studentRepo.findAll();
 	}
 	
+	@ApiOperation(value = "Create a new student.")
 	@PostMapping("")
 	public Student create(@RequestBody Student student) {
 		return studentRepo.save(student);
 	}
 	
+	@ApiOperation(value = "Delete a student.")
 	@DeleteMapping("{id}")
 	public Student delete(@PathVariable long id) {
 		try {
@@ -58,6 +66,7 @@ public class StudentApiController {
 		}
 	}
 
+	@ApiOperation(value = "Update a student.")
 	@PutMapping("{id}")
 	public Student update(@RequestBody Student student, @PathVariable long id) {
 		student.setId(id);

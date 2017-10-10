@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.User;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api")
+@Api(description="This controller deals with loggin in, and session information.")
 public class SessionApiController {
 
 	private UserRepository userRepo;
