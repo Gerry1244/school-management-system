@@ -1,6 +1,10 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
+
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 public class Admin extends User {

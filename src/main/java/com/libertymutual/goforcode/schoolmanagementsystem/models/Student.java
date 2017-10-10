@@ -1,11 +1,14 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 public class Student extends User {
@@ -45,5 +48,6 @@ public class Student extends User {
 	public void setAssignments(List<Assignment> assignments) {
 		this.assignments = assignments;
 	}
+
 
 }
