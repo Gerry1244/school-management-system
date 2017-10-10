@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @MappedSuperclass
 @Table(name="Person")
-public class User {
+public abstract class User {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)

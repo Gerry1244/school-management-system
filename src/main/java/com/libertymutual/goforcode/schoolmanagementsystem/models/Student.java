@@ -1,10 +1,21 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Student extends User {
+	
+	@ManyToMany(mappedBy = "students")
+	List<Assignment> assignments;
+	
+	@ManyToOne
+	Teacher teacher;
+	
 	
 	@Column(nullable=false)
 	private int gradeLevel;
@@ -25,6 +36,14 @@ public class Student extends User {
 
 	public void setGradeLevel(int gradeLevel) {
 		this.gradeLevel = gradeLevel;
+	}
+
+	public List<Assignment> getAssignments() {
+		return assignments;
+	}
+
+	public void setAssignments(List<Assignment> assignments) {
+		this.assignments = assignments;
 	}
 
 }

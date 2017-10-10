@@ -1,15 +1,24 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Assignment {
+	
+	@ManyToMany
+	List<Student> students;
+	
+	@ManyToOne
+	Teacher teacher;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -78,6 +87,22 @@ public class Assignment {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public List<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(List<Student> students) {
+		this.students = students;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
 	}
 
 }

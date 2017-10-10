@@ -52,7 +52,6 @@ public class Announcement {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -68,5 +67,6 @@ public class Announcement {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
+
 }
+
