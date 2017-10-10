@@ -1,6 +1,5 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,11 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import org.springframework.security.core.GrantedAuthority;
-
 @Entity
 public class Student extends User {
 	
+	private static final long serialVersionUID = 1L;
+
 	@ManyToMany(mappedBy = "students")
 	List<Assignment> assignments;
 	
@@ -20,7 +19,7 @@ public class Student extends User {
 	Teacher teacher;
 	
 	
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private int gradeLevel;
 	
 	public Student() {}
