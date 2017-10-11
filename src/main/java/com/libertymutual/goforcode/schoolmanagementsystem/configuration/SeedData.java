@@ -49,7 +49,7 @@ public class SeedData {
 		//Orphan data
 		
 		studentRepo.save(new Student("Little", "Jimmy", "lj@gmail.com", encoder.encode("password"), 6, "STUDENT"));	
-		teacherRepo.save(new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 5, "TEACHER"));
+		teacherRepo.save(new Teacher("Matt", "Meyers", "mm@gmail.com", encoder.encode("password"), 5, "TEACHER"));
 		adminRepo.save(new Admin("Mary", "Richards", "mr@gmail.com", encoder.encode("password"), "ADMIN"));	
 		assignmentRepo.save(new Assignment("Essay on some dumb topic"));
 		
