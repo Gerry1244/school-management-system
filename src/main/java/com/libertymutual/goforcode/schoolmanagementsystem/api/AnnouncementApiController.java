@@ -27,7 +27,6 @@ public class AnnouncementApiController {
 	
 	public AnnouncementApiController(AnnouncementRepository announcementRepo) {
 		this.announcementRepo = announcementRepo;
-		announcementRepo.save(new Announcement("drawing", "draw some shit"));
 	}
 	
 	@ApiOperation(value = "Get a list of all of the announcements.")

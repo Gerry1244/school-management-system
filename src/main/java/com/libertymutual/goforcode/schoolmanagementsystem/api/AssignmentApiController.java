@@ -32,8 +32,6 @@ public class AssignmentApiController {
 	public AssignmentApiController(AssignmentRepository assignmentRepo, StudentRepository studentRepo) {
 		this.assignmentRepo = assignmentRepo;
 		this.studentRepo = studentRepo;
-		assignmentRepo.save(new Assignment("Essay on some dumb topic"));
-		//seed data to test a teacher creating a new assignment and associating all students under that teacher
 		
 	}
 	

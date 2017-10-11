@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Admin;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Announcement;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AdminRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AnnouncementRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
@@ -22,8 +24,8 @@ import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepos
 public class SeedData {
 	
 	public SeedData(UserRepository userRepository, PasswordEncoder encoder, StudentRepository studentRepo, 
-					TeacherRepository teacherRepo, AdminRepository adminRepo, AssignmentRepository assignmentRepo) {
-		Teacher garyTheTeacher = new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 7, "TEACHER");
+					TeacherRepository teacherRepo, AdminRepository adminRepo, AssignmentRepository assignmentRepo, AnnouncementRepository announcementRepo) {
+		Teacher garyTheTeacher = new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 5, "TEACHER");
 		teacherRepo.save(garyTheTeacher);
 		
 		Student student1 = new Student("Richard", "Sandoval", "rs@gmail.com", encoder.encode("password"), 5, "STUDENT");
@@ -40,15 +42,20 @@ public class SeedData {
 		List<Student> garysStudents = studentRepo.findByTeacher(garyTheTeacher);
 		
 		Assignment garysAssignment = new Assignment("Gary Gossage's assignment for 7th grade class");
+		garysAssignment.setStudents(garysStudents);
 		assignmentRepo.save(garysAssignment);
 	
-		garysAssignment.setStudents(garysStudents);
-
+		//------------------ 8============================D  ~ ~ ~ ~ ~ --------------------//
+		//Orphan data
 		
-		studentRepo.save(new Student("MyButt", "InYourFace", "mb@gmail.com", encoder.encode("password"), 5, "STUDENT"));
-		
+		studentRepo.save(new Student("Little", "Jimmy", "lj@gmail.com", encoder.encode("password"), 6, "STUDENT"));	
+		teacherRepo.save(new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 5, "TEACHER"));
 		adminRepo.save(new Admin("Mary", "Richards", "mr@gmail.com", encoder.encode("password"), "ADMIN"));	
 		assignmentRepo.save(new Assignment("Essay on some dumb topic"));
+		
+		announcementRepo.save(new Announcement("drawing", "draw some shit"));
+		announcementRepo.save(new Announcement("The Iron Yard is closing.", "We weren't very profitable so we're closing"));
+		
 	}
 
 }
