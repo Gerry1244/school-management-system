@@ -8,18 +8,20 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property="id")
 @Entity
 public class Teacher extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	@JsonIgnore
 	@OneToMany(fetch=FetchType.EAGER, mappedBy = "teacher", cascade=CascadeType.ALL)
 	List<Assignment> assignments;
 	
-	@JsonIgnore
 	@OneToMany(fetch=FetchType.EAGER, mappedBy = "teacher", cascade=CascadeType.ALL)
 	List<Student> students;
 	

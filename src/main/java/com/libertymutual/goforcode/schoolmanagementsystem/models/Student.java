@@ -10,22 +10,23 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property="id")
 @Entity
 public class Student extends User {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@JsonIgnore
 	@ManyToMany(fetch=FetchType.EAGER, mappedBy = "students", cascade=CascadeType.ALL)
 	List<Assignment> assignments;
 	
-	@JsonIgnore
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="student", cascade=CascadeType.ALL)
 	List<Grade> grades;
 	
-	@JsonIgnore
 	@ManyToOne
 	Teacher teacher;
 	
