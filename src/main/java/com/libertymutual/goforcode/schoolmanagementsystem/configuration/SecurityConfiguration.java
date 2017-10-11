@@ -24,15 +24,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http
-				.csrf().disable()
 				.authorizeRequests()
 					.antMatchers("/**").permitAll()
 //					.antMatchers("/invoices/**").hasAnyRole("ADMIN", "ACCOUNTANT")
 //					.antMatchers("/billing-records/**").hasAnyRole("ADMIN", "CLERK")
 //					.antMatchers("/admin/**").hasRole("ADMIN") 	
-					.anyRequest().authenticated(); //any request that comes through security pipeline has to be authenticated
+					.anyRequest().authenticated() //any request that comes through security pipeline has to be authenticated
 //				.and()	
-//				.formLogin();							
+//				.formLogin();
+			.and()
+				.csrf().disable();
 		}
 		
 	@Bean
