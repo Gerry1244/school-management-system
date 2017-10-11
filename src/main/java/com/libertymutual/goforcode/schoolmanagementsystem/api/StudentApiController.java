@@ -42,7 +42,7 @@ public class StudentApiController {
 		}
 	}
 	
-	@ApiOperation(value = "Get a list of all of the assignments.")
+	@ApiOperation(value = "Get a list of all of the students.")
 	@GetMapping("")
 	public List<Student> getAll() {
 		return studentRepo.findAll();
