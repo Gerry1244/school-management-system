@@ -9,6 +9,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Student extends User {
 	
@@ -20,6 +22,7 @@ public class Student extends User {
 	@OneToMany(mappedBy="student", cascade=CascadeType.ALL)
 	List<Grade> grades;
 	
+	@JsonIgnore
 	@ManyToOne
 	Teacher teacher;
 	
