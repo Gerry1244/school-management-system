@@ -59,5 +59,11 @@ public class TeacherApiController {
 		teacher.setId(id);
 		return teacherRepo.save(teacher);
 	}
+	
+	@ApiOperation(value = "Get a list of teachers by grade level.")
+	@GetMapping("{gradeLevel}")
+	public List<Teacher> getAllTeachersByGradeLevel(int gradeLevel) {
+		return teacherRepo.findByGradeLevel(gradeLevel);
+	}
 
 }
