@@ -17,7 +17,6 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
-import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +33,8 @@ public class AssignmentApiController {
 		this.assignmentRepo = assignmentRepo;
 		this.studentRepo = studentRepo;
 		assignmentRepo.save(new Assignment("Essay on some dumb topic"));
+		//seed data to test a teacher creating a new assignment and associating all students under that teacher
+		
 	}
 	
 	@ApiOperation(value = "Get a list of all of the assignments.")
