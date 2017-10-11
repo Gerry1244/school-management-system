@@ -16,10 +16,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Student extends User {
 	
 	private static final long serialVersionUID = 1L;
-
+	
+	@JsonIgnore
 	@ManyToMany(fetch=FetchType.EAGER, mappedBy = "students", cascade=CascadeType.ALL)
 	List<Assignment> assignments;
 	
+	@JsonIgnore
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="student", cascade=CascadeType.ALL)
 	List<Grade> grades;
 	

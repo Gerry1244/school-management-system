@@ -14,15 +14,20 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Assignment {
 	
+	@JsonIgnore
 	@ManyToMany
 	List<Student> students;
 	
+	@JsonIgnore
 	@ManyToOne
 	Teacher teacher;
 	
+	@JsonIgnore
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="assignment", cascade=CascadeType.ALL)
 	List<Grade> grades;
 	

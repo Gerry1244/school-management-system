@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Grade {
 	
@@ -17,9 +19,11 @@ public class Grade {
 	@Column(length=2, nullable=true)
 	private String letterGradeValue;
 	
+	@JsonIgnore
 	@ManyToOne
 	Assignment assignment;
 	
+	@JsonIgnore
 	@ManyToOne
 	Student student;
 	
