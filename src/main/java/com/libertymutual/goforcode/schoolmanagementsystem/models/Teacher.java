@@ -24,12 +24,13 @@ public class Teacher extends User {
 	public Teacher() {
 	}
 
-	public Teacher(String firstName, String lastName, String email, String password, int gradeTaught) {
+	public Teacher(String firstName, String lastName, String email, String password, int gradeTaught, String roleName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.gradeTaught = gradeTaught;
+		this.roleName = roleName;
 	}
 
 	public int getGradeTaught() {
@@ -46,6 +47,18 @@ public class Teacher extends User {
 
 	public void setAssignments(List<Assignment> assignments) {
 		this.assignments = assignments;
+	}
+
+	public List<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(List<Student> students) {
+		this.students = students;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 

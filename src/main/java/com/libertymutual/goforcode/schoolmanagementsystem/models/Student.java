@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Student extends User {
@@ -15,7 +16,7 @@ public class Student extends User {
 	@ManyToMany(mappedBy = "students")
 	List<Assignment> assignments;
 	
-	@ManyToMany
+	@OneToMany(mappedBy="student")
 	List<Grade> grades;
 	
 	@ManyToOne
@@ -27,12 +28,13 @@ public class Student extends User {
 	
 	public Student() {}
 	
-	public Student(String firstName, String lastName, String email, String password, int gradeLevel) {
+	public Student(String firstName, String lastName, String email, String password, int gradeLevel, String roleName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.gradeLevel = gradeLevel;
+		this.roleName = roleName;
 	}
 
 	public int getGradeLevel() {
@@ -49,6 +51,26 @@ public class Student extends User {
 
 	public void setAssignments(List<Assignment> assignments) {
 		this.assignments = assignments;
+	}
+
+	public List<Grade> getGrades() {
+		return grades;
+	}
+
+	public void setGrades(List<Grade> grades) {
+		this.grades = grades;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 

@@ -1,22 +1,14 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -41,11 +33,9 @@ public class User implements UserDetails {
 
 	@Column(length = 75, nullable = false)
 	protected String password;
-
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL) // cascade means any action to
-	// user, will flow down to
-	// associated entities
-	private List<UserRole> roles;
+	
+	@Column(length= 75, nullable=false)
+	String roleName;
 
 	public User() {
 	}
@@ -55,20 +45,20 @@ public class User implements UserDetails {
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
-		roles = new ArrayList<UserRole>();
-		roles.add(new UserRole(roleName, this));
+		this.roleName = roleName;
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<String> roleNames = roles.stream().map(userRole -> "ROLE_" + userRole.getName()) // userRole is a variable
-																								// name, represents
-																								// individual user role
-																								// in List<UserRole>
-				.collect(Collectors.toList());
-
-		String authorityString = String.join(",", roleNames); // turns into comma seperated list
-		return AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
+//		List<String> roleNames = roles.stream().map(userRole -> "ROLE_" + userRole.getName()) // userRole is a variable
+//																								// name, represents
+//																								// individual user role
+//																								// in List<UserRole>
+//				.collect(Collectors.toList());
+//
+//		String authorityString = String.join(",", roleNames); // turns into comma seperated list
+//		return AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
+		return null;
 	}
 
 	public Long getId() {
@@ -136,12 +126,16 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	public List<UserRole> getRoles() {
-		return roles;
+	public String getRoleName() {
+		return roleName;
 	}
 
-	public void setRoles(List<UserRole> roles) {
-		this.roles = roles;
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

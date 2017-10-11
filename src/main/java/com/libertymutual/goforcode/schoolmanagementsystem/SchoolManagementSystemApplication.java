@@ -19,8 +19,8 @@ public class SchoolManagementSystemApplication {
 	}
 
 	public SchoolManagementSystemApplication(PasswordEncoder encoder, StudentRepository studentRepo, TeacherRepository teacherRepo, AdminRepository adminRepo) {
-		studentRepo.save(new Student("Richard", "Sandoval", "rs@gmail.com", encoder.encode("password"), 5));
-		teacherRepo.save(new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 7));
-		adminRepo.save(new Admin("Mary", "Richards", "mr@gmail.com", encoder.encode("password")));
+		studentRepo.save(new Student("Richard", "Sandoval", "rs@gmail.com", encoder.encode("password"), 5, "STUDENT"));
+		teacherRepo.save(new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 7, "TEACHER"));
+		adminRepo.save(new Admin("Mary", "Richards", "mr@gmail.com", encoder.encode("password"), "ADMIN"));
 	}
 }

@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Assignment {
@@ -20,7 +21,7 @@ public class Assignment {
 	@ManyToOne
 	Teacher teacher;
 	
-	@ManyToMany
+	@OneToMany(mappedBy="assignment")
 	List<Grade> grades;
 	
 	@Id
@@ -106,6 +107,14 @@ public class Assignment {
 
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
+	}
+
+	public List<Grade> getGrades() {
+		return grades;
+	}
+
+	public void setGrades(List<Grade> grades) {
+		this.grades = grades;
 	}
 
 }

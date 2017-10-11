@@ -1,13 +1,11 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Grade {
@@ -19,11 +17,11 @@ public class Grade {
 	@Column(length=2, nullable=true)
 	private String letterGradeValue;
 	
-	@ManyToMany(mappedBy="grades")
-	List<Assignment> assignments;
+	@ManyToOne
+	Assignment assignment;
 	
-	@ManyToMany(mappedBy="grades")
-	List<Student> students;
+	@ManyToOne
+	Student student;
 	
 	public Grade() {}
 	
@@ -47,20 +45,20 @@ public class Grade {
 		this.letterGradeValue = letterGradeValue;
 	}
 
-	public List<Assignment> getAssignments() {
-		return assignments;
+	public Assignment getAssignment() {
+		return assignment;
 	}
 
-	public void setAssignments(List<Assignment> assignments) {
-		this.assignments = assignments;
+	public void setAssignment(Assignment assignment) {
+		this.assignment = assignment;
 	}
 
-	public List<Student> getStudents() {
-		return students;
+	public Student getStudent() {
+		return student;
 	}
 
-	public void setStudents(List<Student> students) {
-		this.students = students;
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 
 }

@@ -9,11 +9,16 @@ public class Admin extends User {
 
 	public Admin() {}
 	
-	public Admin(String firstName, String lastName, String email, String password) {
+	public Admin(String firstName, String lastName, String email, String password, String roleName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+		this.roleName = roleName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }
