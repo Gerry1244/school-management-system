@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,9 +27,11 @@ import io.swagger.annotations.ApiOperation;
 public class StudentApiController {
 
 	private StudentRepository studentRepo;
+	private TeacherRepository teacherRepo;
 
-	public StudentApiController(StudentRepository studentRepo) {
+	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo) {
 		this.studentRepo = studentRepo;
+		this.teacherRepo = teacherRepo;
 	}
 
 	@ApiOperation(value = "Get a list of all of the assignments by student id.")
@@ -48,10 +52,13 @@ public class StudentApiController {
 		return studentRepo.findAll();
 	}
 	
-	@ApiOperation(value = "Create a new student.")
-	@PostMapping("")
-	public Student create(@RequestBody Student student) {
-		return studentRepo.save(student);
+	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
+	@PostMapping("{id}")
+	public Student createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id) {
+		Teacher teacher = teacherRepo.findOne(id);
+		student.setTeacher(teacher);
+		studentRepo.save(student);
+		return student;
 	}
 	
 	@ApiOperation(value = "Delete a student.")

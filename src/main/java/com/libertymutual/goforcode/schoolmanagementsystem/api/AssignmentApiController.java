@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
 
 import io.swagger.annotations.Api;
@@ -37,9 +38,10 @@ public class AssignmentApiController {
 		return assignmentRepo.findAll();
 	}
 	
-	@ApiOperation(value = "Create a new assignment.")
+	@ApiOperation(value = "Create a new assignment, and associate it to all students under the teacher.")
 	@PostMapping("")
-	public Assignment create(@RequestBody Assignment assignment) {
+	public Assignment create(@RequestBody Assignment assignment, @RequestBody Teacher teacher) {
+		
 		return assignmentRepo.save(assignment);
 	}
 	

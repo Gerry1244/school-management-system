@@ -2,6 +2,7 @@ package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -13,10 +14,10 @@ public class Student extends User {
 	
 	private static final long serialVersionUID = 1L;
 
-	@ManyToMany(mappedBy = "students")
+	@ManyToMany(mappedBy = "students", cascade=CascadeType.ALL)
 	List<Assignment> assignments;
 	
-	@OneToMany(mappedBy="student")
+	@OneToMany(mappedBy="student", cascade=CascadeType.ALL)
 	List<Grade> grades;
 	
 	@ManyToOne

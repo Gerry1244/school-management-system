@@ -3,6 +3,7 @@ package com.libertymutual.goforcode.schoolmanagementsystem.models;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class Assignment {
 	@ManyToOne
 	Teacher teacher;
 	
-	@OneToMany(mappedBy="assignment")
+	@OneToMany(mappedBy="assignment", cascade=CascadeType.ALL)
 	List<Grade> grades;
 	
 	@Id
