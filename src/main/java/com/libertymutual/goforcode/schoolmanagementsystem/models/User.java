@@ -1,6 +1,8 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -50,6 +53,12 @@ public class User implements UserDetails {
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		
+		Collection<GrantedAuthority> list = new ArrayList();
+		
+		list.add(new SimpleGrantedAuthority("ROLE_" + this.roleName));
+		
+		return list;
 //		List<String> roleNames = roles.stream().map(userRole -> "ROLE_" + userRole.getName()) // userRole is a variable
 //																								// name, represents
 //																								// individual user role
@@ -58,7 +67,6 @@ public class User implements UserDetails {
 //
 //		String authorityString = String.join(",", roleNames); // turns into comma seperated list
 //		return AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
-		return null;
 	}
 
 	public Long getId() {
