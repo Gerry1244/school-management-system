@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -12,10 +13,10 @@ public class Teacher extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	@OneToMany(mappedBy = "teacher", cascade=CascadeType.ALL)
+	@OneToMany(fetch=FetchType.EAGER, mappedBy = "teacher", cascade=CascadeType.ALL)
 	List<Assignment> assignments;
 	
-	@OneToMany(mappedBy = "teacher", cascade=CascadeType.ALL)
+	@OneToMany(fetch=FetchType.EAGER, mappedBy = "teacher", cascade=CascadeType.ALL)
 	List<Student> students;
 	
 
