@@ -20,27 +20,27 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api/teachers")
-@Api(description="Use this to get all, create, delete, and update teachers.")
+@Api(description = "Use this to get all, create, delete, and update teachers.")
 public class TeacherApiController {
-	
+
 	private TeacherRepository teacherRepo;
 
 	public TeacherApiController(TeacherRepository teacherRepo) {
 		this.teacherRepo = teacherRepo;
 	}
-	
+
 	@ApiOperation(value = "Get a list of teachers.")
 	@GetMapping("")
 	public List<Teacher> getAll() {
 		return teacherRepo.findAll();
 	}
-	
+
 	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("")
 	public Teacher create(@RequestBody Teacher teacher) {
 		return teacherRepo.save(teacher);
 	}
-	
+
 	@ApiOperation(value = "Delete a teacher.")
 	@DeleteMapping("{id}")
 	public Teacher delete(@PathVariable long id) {
@@ -58,6 +58,18 @@ public class TeacherApiController {
 	public Teacher update(@RequestBody Teacher teacher, @PathVariable long id) {
 		teacher.setId(id);
 		return teacherRepo.save(teacher);
+	}
+
+	@ApiOperation(value = "Get a list of teachers by grade level.")
+	@GetMapping("{gradeLevel}")
+	public List<Teacher> getAllTeachersByGradeLevel(@PathVariable Integer gradeLevel) {
+		List<Teacher> list = null;
+		if (gradeLevel != null) {
+			list = teacherRepo.findByGradeLevel(gradeLevel);
+		}
+
+		return list;
+
 	}
 
 }
