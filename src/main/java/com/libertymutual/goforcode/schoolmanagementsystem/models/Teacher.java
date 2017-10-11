@@ -20,26 +20,26 @@ public class Teacher extends User {
 	
 
 	@Column(nullable = true)
-	private int gradeTaught;
+	private int gradeLevel;
 
 	public Teacher() {
 	}
 
-	public Teacher(String firstName, String lastName, String email, String password, int gradeTaught, String roleName) {
+	public Teacher(String firstName, String lastName, String email, String password, int gradeLevel, String roleName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
-		this.gradeTaught = gradeTaught;
+		this.gradeLevel = gradeLevel;
 		this.roleName = roleName;
 	}
 
-	public int getGradeTaught() {
-		return gradeTaught;
+	public int getGradeLevel() {
+		return gradeLevel;
 	}
 
-	public void setGradeTaught(int gradeTaught) {
-		this.gradeTaught = gradeTaught;
+	public void setGradeLevel(int gradeLevel) {
+		this.gradeLevel = gradeLevel;
 	}
 
 	public List<Assignment> getAssignments() {
