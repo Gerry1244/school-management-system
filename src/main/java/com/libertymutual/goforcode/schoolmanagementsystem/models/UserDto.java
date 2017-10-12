@@ -8,6 +8,10 @@ private User user;
 		this.user = user;
 	}
 	
+	public Long getUserId() {
+		return user.getId();
+	}
+	
 	public String getFirstName() {
 		return user.getFirstName();
 	}
