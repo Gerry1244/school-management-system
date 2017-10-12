@@ -28,12 +28,24 @@ public class TeacherApiController {
 	public TeacherApiController(TeacherRepository teacherRepo) {
 		this.teacherRepo = teacherRepo;
 	}
+	
+	@ApiOperation(value = "Get a specific teacher by id.")
+	@GetMapping("{id}")
+	public Teacher getOne(@PathVariable long id) {
+		try {
+			Teacher teacher = teacherRepo.findOne(id);
+			return teacher;
+		} catch (EmptyResultDataAccessException erdae) {
+			return null;
+		}
+	}
 
 	@ApiOperation(value = "Get a list of teachers.")
 	@GetMapping("")
 	public List<Teacher> getAll() {
 		return teacherRepo.findAll();
 	}
+	
 
 	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("")
@@ -60,16 +72,17 @@ public class TeacherApiController {
 		return teacherRepo.save(teacher);
 	}
 
-	@ApiOperation(value = "Get a list of teachers by grade level.")
-	@GetMapping("{gradeLevel}")
-	public List<Teacher> getAllTeachersByGradeLevel(@PathVariable Integer gradeLevel) {
-		List<Teacher> list = null;
-		if (gradeLevel != null) {
-			list = teacherRepo.findByGradeLevel(gradeLevel);
-		}
-
-		return list;
-
-	}
+	//Moved this to GradeLevelApiController. delete once confirmed it's working
+//	@ApiOperation(value = "Get a list of teachers by grade level.")
+//	@GetMapping("{gradeLevel}")
+//	public List<Teacher> getAllTeachersByGradeLevel(@PathVariable Integer gradeLevel) {
+//		List<Teacher> list = null;
+//		if (gradeLevel != null) {
+//			list = teacherRepo.findByGradeLevel(gradeLevel);
+//		}
+//
+//		return list;
+//
+//	}
 
 }

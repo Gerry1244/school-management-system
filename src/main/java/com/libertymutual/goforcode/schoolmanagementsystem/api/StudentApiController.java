@@ -33,6 +33,17 @@ public class StudentApiController {
 		this.studentRepo = studentRepo;
 		this.teacherRepo = teacherRepo;
 	}
+	
+	@ApiOperation(value = "Get a specific student by id.")
+	@GetMapping("{id}")
+	public Student getOne(@PathVariable long id) {
+		try {
+			Student student = studentRepo.findOne(id);
+			return student;
+		} catch (EmptyResultDataAccessException erdae) {
+			return null;
+		}
+	}
 
 	@ApiOperation(value = "Get a list of all of the assignments by student id.")
 	@GetMapping("{id}/assignments")

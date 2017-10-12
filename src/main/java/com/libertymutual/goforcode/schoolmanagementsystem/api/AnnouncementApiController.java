@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Announcement;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AnnouncementRepository;
 
 import io.swagger.annotations.Api;
@@ -27,6 +28,17 @@ public class AnnouncementApiController {
 	
 	public AnnouncementApiController(AnnouncementRepository announcementRepo) {
 		this.announcementRepo = announcementRepo;
+	}
+	
+	@ApiOperation(value = "Get a specific teacher by id.")
+	@GetMapping("{id}")
+	public Announcement getOne(@PathVariable long id) {
+		try {
+			Announcement announcement = announcementRepo.findOne(id);
+			return announcement;
+		} catch (EmptyResultDataAccessException erdae) {
+			return null;
+		}
 	}
 	
 	@ApiOperation(value = "Get a list of all of the announcements.")
