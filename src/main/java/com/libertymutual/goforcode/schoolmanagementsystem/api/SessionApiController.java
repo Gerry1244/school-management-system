@@ -20,7 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/session")
 @Api(description = "This controller deals with loggin in, and session information.")
 public class SessionApiController {
 
@@ -36,25 +36,23 @@ public class SessionApiController {
 	}
 
 	@ApiOperation(value = "Log a user in.")
-	@PutMapping("/login")
+	@PutMapping("")
 	public Boolean login(@RequestBody Credentials credentials) {
 		System.out.println("login method ran");
 
 		UserDetails details = userDetails.loadUserByUsername(credentials.getUsername());
 
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details,
-				credentials.password, details.getAuthorities());
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details, credentials.password, details.getAuthorities());
 
 		authenticator.authenticate(token);
 		if (token.isAuthenticated()) {
 			SecurityContextHolder.getContext().setAuthentication(token);
-		}
-		;
+		};
 		return token.isAuthenticated();
 	}
 
 	@ApiOperation(value = "Logout a user.")
-	@DeleteMapping("/logout")
+	@DeleteMapping("")
 	public Boolean logout(Authentication auth, HttpServletRequest request, HttpServletResponse response) {
 		new SecurityContextLogoutHandler().logout(request, response, auth);
 		return true;
