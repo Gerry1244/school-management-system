@@ -11,10 +11,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.libertymutual.goforcode.schoolmanagementsystem.models.User;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.UserDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,23 +38,25 @@ public class SessionApiController {
 		this.userDetails = userDetails;
 		this.authenticator = authenticator;
 	}
+	
 
 	@ApiOperation(value = "Log a user in.")
 	@PutMapping("")
-	public Boolean login(@RequestBody Credentials credentials) {
+	public UserDto login(@RequestBody Credentials credentials, Authentication auth) {
 		System.out.println("login method ran");
 
-		UserDetails details = userDetails.loadUserByUsername(credentials.getUsername());
+		User user = (User) userDetails.loadUserByUsername(credentials.getUsername());
 
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details, credentials.password, details.getAuthorities());
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, credentials.password, user.getAuthorities());
 
 		authenticator.authenticate(token);
 		if (token.isAuthenticated()) {
 			SecurityContextHolder.getContext().setAuthentication(token);
 		};
-		return token.isAuthenticated();
+		return new UserDto(user);
 	}
 
+	
 	@ApiOperation(value = "Logout a user.")
 	@DeleteMapping("")
 	public Boolean logout(Authentication auth, HttpServletRequest request, HttpServletResponse response) {
