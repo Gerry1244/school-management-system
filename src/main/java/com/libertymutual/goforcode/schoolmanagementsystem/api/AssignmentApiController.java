@@ -1,6 +1,5 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.api;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -45,21 +44,6 @@ public class AssignmentApiController {
 	public List<Assignment> getAll() {
 		return assignmentRepo.findAll();
 	}
-	
-//	@ApiOperation(value = "Create a new assignment, and associate it to all students under the teacher.")
-//	@PostMapping("")
-//	public Assignment create(@RequestBody Assignment assignment, @RequestBody Teacher teacher) {
-//		// find all students associated with teacher
-//		List<Student> students;
-//		try {
-//			students = studentRepo.findByTeacher(teacher);
-//			assignment.setStudents(students);
-//			return assignmentRepo.save(assignment);
-//		} catch (EmptyResultDataAccessException erdae) {
-//			return null;
-//		}
-//
-//	}
 	
 	@ApiOperation(value = "Creates a new assignment, and associate it to all students under the teacher.")
 	@PostMapping("")

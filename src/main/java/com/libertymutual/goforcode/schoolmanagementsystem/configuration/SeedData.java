@@ -42,8 +42,11 @@ public class SeedData {
 		List<Student> garysStudents = studentRepo.findByTeacher(garyTheTeacher);
 		
 		Assignment garysAssignment = new Assignment("Gary Gossage's assignment for 7th grade class");
+		Assignment garysAssignment2 = new Assignment("Gary Gossage's second assignment for 7th grade class");
 		garysAssignment.setStudents(garysStudents);
 		assignmentRepo.save(garysAssignment);
+		garysAssignment2.setStudents(garysStudents);
+		assignmentRepo.save(garysAssignment2);
 	
 		//------------------ 8============================D  ~ ~ ~ ~ ~ --------------------//
 		//Orphan data
