@@ -101,7 +101,7 @@ public class AssignmentApiController {
 	}
 
 	@ApiOperation(value = "Get a list of students assigned to a particular assignment.")
-	@GetMapping("{id}")
+	@GetMapping("{id}/students")
 	public List<Student> getAllStudentsByAssignment(@PathVariable long id) {
 		try {
 			Assignment individualAssignment = assignmentRepo.findOne(id);
