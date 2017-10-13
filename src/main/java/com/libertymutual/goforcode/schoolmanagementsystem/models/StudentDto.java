@@ -4,9 +4,11 @@ public class StudentDto {
 
 	private Student student;
 	
+	
 	public StudentDto(Student student) {
 		this.student = student;
 	}
+	
 	
 	public Long getUserId() {
 		return student.getId();

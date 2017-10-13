@@ -27,5 +27,5 @@ private User user;
 	public String getRoleName() {
 		return user.getRoleName();
 	}
-	
+
 }

@@ -1,5 +1,6 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -60,20 +61,26 @@ public class StudentApiController {
 	
 	@ApiOperation(value = "Get a list of all of the students.")
 	@GetMapping("")
-	public List<Student> getAll() {
-		return studentRepo.findAll();
+	public List<StudentDto> getAll() {
+		List<Student> studentList = studentRepo.findAll();
+		
+		List<StudentDto> studentDtoList = new ArrayList<StudentDto>();
+		for (Student student : studentList) {
+			StudentDto studentDto = new StudentDto(student);
+			studentDtoList.add(studentDto);
+		}
+	
+		return studentDtoList;
+		
 	}
 	
 	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
 	@PostMapping("{id}")
 	public StudentDto createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id) {
 		Teacher teacher = teacherRepo.findOne(id);
-		System.out.println(teacher);
 		student.setTeacher(teacher);
-		System.out.println(student.getTeacher());
 		studentRepo.save(student);
 		return new StudentDto(student);
-		//return student;
 	}
 	
 	@ApiOperation(value = "Delete a student.")
