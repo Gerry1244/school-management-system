@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.StudentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.UserDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
@@ -65,11 +67,14 @@ public class StudentApiController {
 	
 	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
 	@PostMapping("{id}")
-	public Student createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id) {
+	public StudentDto createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id) {
 		Teacher teacher = teacherRepo.findOne(id);
+		System.out.println(teacher);
 		student.setTeacher(teacher);
+		System.out.println(student.getTeacher());
 		studentRepo.save(student);
-		return student;
+		return new StudentDto(student);
+		//return student;
 	}
 	
 	@ApiOperation(value = "Delete a student.")
