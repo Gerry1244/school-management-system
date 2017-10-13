@@ -16,7 +16,6 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.StudentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
-import com.libertymutual.goforcode.schoolmanagementsystem.models.UserDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
@@ -38,10 +37,10 @@ public class StudentApiController {
 	
 	@ApiOperation(value = "Get a specific student by id.")
 	@GetMapping("{id}")
-	public Student getOne(@PathVariable long id) {
+	public StudentDto getOne(@PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(id);
-			return student;
+			return new StudentDto(student);
 		} catch (EmptyResultDataAccessException erdae) {
 			return null;
 		}
@@ -79,11 +78,11 @@ public class StudentApiController {
 	
 	@ApiOperation(value = "Delete a student.")
 	@DeleteMapping("{id}")
-	public Student delete(@PathVariable long id) {
+	public StudentDto delete(@PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(id);
 			studentRepo.delete(id);
-			return student;
+			return new StudentDto(student);
 		} catch (EmptyResultDataAccessException erdae) {
 			return null;
 		}
@@ -91,9 +90,10 @@ public class StudentApiController {
 
 	@ApiOperation(value = "Update a student.")
 	@PutMapping("{id}")
-	public Student update(@RequestBody Student student, @PathVariable long id) {
+	public StudentDto update(@RequestBody Student student, @PathVariable long id) {
 		student.setId(id);
-		return studentRepo.save(student);
+		studentRepo.save(student);
+		return new StudentDto(student);
 	}
 
 }

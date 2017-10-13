@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.TeacherDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
 import io.swagger.annotations.Api;
@@ -31,10 +32,10 @@ public class TeacherApiController {
 	
 	@ApiOperation(value = "Get a specific teacher by id.")
 	@GetMapping("{id}")
-	public Teacher getOne(@PathVariable long id) {
+	public TeacherDto getOne(@PathVariable long id) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
-			return teacher;
+			return new TeacherDto(teacher);
 		} catch (EmptyResultDataAccessException erdae) {
 			return null;
 		}
@@ -49,17 +50,18 @@ public class TeacherApiController {
 
 	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("")
-	public Teacher create(@RequestBody Teacher teacher) {
-		return teacherRepo.save(teacher);
+	public TeacherDto create(@RequestBody Teacher teacher) {
+		teacherRepo.save(teacher);
+		return new TeacherDto(teacher);
 	}
 
 	@ApiOperation(value = "Delete a teacher.")
 	@DeleteMapping("{id}")
-	public Teacher delete(@PathVariable long id) {
+	public TeacherDto delete(@PathVariable long id) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
 			teacherRepo.delete(id);
-			return teacher;
+			return new TeacherDto(teacher);
 		} catch (EmptyResultDataAccessException erdae) {
 			return null;
 		}
@@ -67,22 +69,10 @@ public class TeacherApiController {
 
 	@ApiOperation(value = "Update a teacher.")
 	@PutMapping("{id}")
-	public Teacher update(@RequestBody Teacher teacher, @PathVariable long id) {
+	public TeacherDto update(@RequestBody Teacher teacher, @PathVariable long id) {
 		teacher.setId(id);
-		return teacherRepo.save(teacher);
+		teacherRepo.save(teacher);
+		return new TeacherDto(teacher);
 	}
-
-	//Moved this to GradeLevelApiController. delete once confirmed it's working
-//	@ApiOperation(value = "Get a list of teachers by grade level.")
-//	@GetMapping("{gradeLevel}")
-//	public List<Teacher> getAllTeachersByGradeLevel(@PathVariable Integer gradeLevel) {
-//		List<Teacher> list = null;
-//		if (gradeLevel != null) {
-//			list = teacherRepo.findByGradeLevel(gradeLevel);
-//		}
-//
-//		return list;
-//
-//	}
 
 }
