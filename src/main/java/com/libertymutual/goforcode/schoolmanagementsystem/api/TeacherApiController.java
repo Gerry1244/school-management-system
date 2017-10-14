@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.libertymutual.goforcode.schoolmanagementsystem.dto.TeacherDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
-import com.libertymutual.goforcode.schoolmanagementsystem.models.TeacherDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
 import io.swagger.annotations.Api;

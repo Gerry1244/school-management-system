@@ -1,4 +1,6 @@
-package com.libertymutual.goforcode.schoolmanagementsystem.models;
+package com.libertymutual.goforcode.schoolmanagementsystem.dto;
+
+import com.libertymutual.goforcode.schoolmanagementsystem.models.User;
 
 public class UserDto {
 

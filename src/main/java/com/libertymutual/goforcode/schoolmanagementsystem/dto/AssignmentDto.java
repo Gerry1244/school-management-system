@@ -1,6 +1,8 @@
-package com.libertymutual.goforcode.schoolmanagementsystem.models;
+package com.libertymutual.goforcode.schoolmanagementsystem.dto;
 
 import java.util.Date;
+
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 
 public class AssignmentDto {
 
