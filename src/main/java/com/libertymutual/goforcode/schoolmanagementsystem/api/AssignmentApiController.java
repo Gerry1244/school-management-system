@@ -49,20 +49,15 @@ public class AssignmentApiController {
 	public List<AssignmentDto> getAll() {
 		List<Assignment> assignments;
 		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
-		try {
-			assignments = assignmentRepo.findAll();
-			if (assignments != null) {
-				for (Assignment assignment : assignments) {
-					AssignmentDto assignmentDto = new AssignmentDto(assignment);
-					assignmentsDto.add(assignmentDto);
-				}
-				return assignmentsDto;
-			} else
-				return null;
-		} catch (Exception e) {
-			System.err.println("Teacher getAll() failed: " + e.getClass().getName());
+		assignments = assignmentRepo.findAll();
+		if (assignments != null) {
+			for (Assignment assignment : assignments) {
+				AssignmentDto assignmentDto = new AssignmentDto(assignment);
+				assignmentsDto.add(assignmentDto);
+			}
+			return assignmentsDto;
+		} else
 			return null;
-		}
 	}
 
 	@ApiOperation(value = "Get a specific assignment by id.")
@@ -101,7 +96,7 @@ public class AssignmentApiController {
 			return null;
 		}
 	}
-	
+
 	@ApiOperation(value = "Creates a new assignment, and associate it to all students under the teacher.")
 	@PostMapping("")
 	public AssignmentDto createAndAssociateToStudents(@RequestBody CreateAssignmentModel assignment) {
@@ -111,13 +106,16 @@ public class AssignmentApiController {
 				assignment.getDueDate(), assignment.getComment());
 		try {
 			teacher = teacherRepo.findOne(assignment.getTeacherId());
-				students = studentRepo.findByTeacher(teacher);
-				if (teacher != null && students != null) {
+			students = studentRepo.findByTeacher(teacher);
+			if (teacher != null && students != null) {
 				newAssignment.setStudents(students);
 				assignmentRepo.save(newAssignment);
 				return new AssignmentDto(newAssignment);
 			} else
 				return null;
+		} catch (DataIntegrityViolationException dive) {
+			System.err.println("Assignment in request body was not valid: " + dive);
+			return null;
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("createAndAssociateToStudents failed:" + erdae);
 			return null;

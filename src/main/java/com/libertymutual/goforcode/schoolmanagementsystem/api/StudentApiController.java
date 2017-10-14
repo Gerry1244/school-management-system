@@ -3,6 +3,8 @@ package com.libertymutual.goforcode.schoolmanagementsystem.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
@@ -51,11 +54,20 @@ public class StudentApiController {
 
 	@ApiOperation(value = "Get a list of all of the assignments by student id.")
 	@GetMapping("{id}/assignments")
-	public List<Assignment> getAllAssignmentsByStudent(@PathVariable long id) {
+	public List<AssignmentDto> getAllAssignmentsByStudent(@PathVariable long id) {
+		List<Assignment> assignments;
+		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
 		try {
 			Student student = studentRepo.findOne(id);
-			List<Assignment> assignments = student.getAssignments();
-			return assignments;
+			if (student != null) {
+				assignments = student.getAssignments();
+				for (Assignment assignment : assignments) {
+					AssignmentDto assignmentDto = new AssignmentDto(assignment);
+					assignmentsDto.add(assignmentDto);
+				}
+				return assignmentsDto;
+			}
+			return null;
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Student id: " + id + " not found. Error: " + erdae);
 			return null;
@@ -67,18 +79,15 @@ public class StudentApiController {
 	public List<StudentDto> getAll() {
 		List<Student> students;
 		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
-		try {
-			students = studentRepo.findAll();
+		students = studentRepo.findAll();
+		if (students != null) {
 			for (Student student : students) {
 				StudentDto studentDto = new StudentDto(student);
 				studentsDto.add(studentDto);
 			}
 			return studentsDto;
-		} catch (Exception e) {
-			System.err.println("Student getAll() failed: " + e.getClass().getName());
-			return null;
 		}
-
+		return null;
 	}
 
 	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
@@ -123,8 +132,7 @@ public class StudentApiController {
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Student id: " + id + " not found. Error: " + erdae);
 			return null;
-		}
-		catch (DataIntegrityViolationException dive) {
+		} catch (DataIntegrityViolationException dive) {
 			System.err.println("Student in request body was not valid: " + dive);
 			return null;
 		}

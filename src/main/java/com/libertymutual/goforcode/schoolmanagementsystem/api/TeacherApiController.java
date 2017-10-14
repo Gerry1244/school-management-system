@@ -49,18 +49,15 @@ public class TeacherApiController {
 	public List<TeacherDto> getAll() {
 		List<Teacher> teachers;
 		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
-
-		try {
-			teachers = teacherRepo.findAll();
+		teachers = teacherRepo.findAll();
+		if (teachers != null) {
 			for (Teacher teacher : teachers) {
 				TeacherDto teacherDto = new TeacherDto(teacher);
 				teachersDto.add(teacherDto);
 			}
 			return teachersDto;
-		} catch (Exception e) {
-			System.err.println("Teacher getAll() failed: " + e.getClass().getName());
+		} else
 			return null;
-		}
 	}
 
 	@ApiOperation(value = "Create a new teacher.")
@@ -98,8 +95,7 @@ public class TeacherApiController {
 		} catch (DataIntegrityViolationException dive) {
 			System.err.println("Teacher in request body was not valid: " + dive);
 			return null;
-		}
-		catch (EmptyResultDataAccessException erdae) {
+		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Teaher id: " + id + " not found. Error: " + erdae);
 			return null;
 		}
