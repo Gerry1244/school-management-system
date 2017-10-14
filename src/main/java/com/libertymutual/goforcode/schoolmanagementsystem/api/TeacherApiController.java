@@ -1,7 +1,9 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +31,7 @@ public class TeacherApiController {
 	public TeacherApiController(TeacherRepository teacherRepo) {
 		this.teacherRepo = teacherRepo;
 	}
-	
+
 	@ApiOperation(value = "Get a specific teacher by id.")
 	@GetMapping("{id}")
 	public TeacherDto getOne(@PathVariable long id) {
@@ -37,22 +39,40 @@ public class TeacherApiController {
 			Teacher teacher = teacherRepo.findOne(id);
 			return new TeacherDto(teacher);
 		} catch (EmptyResultDataAccessException erdae) {
+			System.err.println("Teacher id: " + id + " not found. Error: " + erdae);
 			return null;
 		}
 	}
 
 	@ApiOperation(value = "Get a list of teachers.")
 	@GetMapping("")
-	public List<Teacher> getAll() {
-		return teacherRepo.findAll();
+	public List<TeacherDto> getAll() {
+		List<Teacher> teachers;
+		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
+
+		try {
+			teachers = teacherRepo.findAll();
+			for (Teacher teacher : teachers) {
+				TeacherDto teacherDto = new TeacherDto(teacher);
+				teachersDto.add(teacherDto);
+			}
+			return teachersDto;
+		} catch (Exception e) {
+			System.err.println("Teacher getAll() failed: " + e.getClass().getName());
+			return null;
+		}
 	}
-	
 
 	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("")
 	public TeacherDto create(@RequestBody Teacher teacher) {
-		teacherRepo.save(teacher);
-		return new TeacherDto(teacher);
+		try {
+			teacherRepo.save(teacher);
+			return new TeacherDto(teacher);
+		} catch (DataIntegrityViolationException dive) {
+			System.err.println("Teacher in request body was not valid: " + dive);
+			return null;
+		}
 	}
 
 	@ApiOperation(value = "Delete a teacher.")
@@ -63,6 +83,7 @@ public class TeacherApiController {
 			teacherRepo.delete(id);
 			return new TeacherDto(teacher);
 		} catch (EmptyResultDataAccessException erdae) {
+			System.err.println("Teacher id: " + id + " not found. Error: " + erdae);
 			return null;
 		}
 	}
@@ -70,9 +91,19 @@ public class TeacherApiController {
 	@ApiOperation(value = "Update a teacher.")
 	@PutMapping("{id}")
 	public TeacherDto update(@RequestBody Teacher teacher, @PathVariable long id) {
-		teacher.setId(id);
-		teacherRepo.save(teacher);
-		return new TeacherDto(teacher);
+		try {
+			teacher.setId(id);
+			teacherRepo.save(teacher);
+			return new TeacherDto(teacher);
+		} catch (DataIntegrityViolationException dive) {
+			System.err.println("Teacher in request body was not valid: " + dive);
+			return null;
+		}
+		catch (EmptyResultDataAccessException erdae) {
+			System.err.println("Teaher id: " + id + " not found. Error: " + erdae);
+			return null;
+		}
+
 	}
 
 }
