@@ -54,9 +54,18 @@ public class SeedData {
 		assignmentRepo.save(garysAssignment);
 		assignmentRepo.save(garysAssignment2);
 		
+		//Assign default grades to garysAssignment
 		for (Student student : garysStudents) {
 			Grade grade = new Grade();
 			grade.setAssignment(garysAssignment);
+			grade.setStudent(student);
+			grade.setLetterGradeValue("Not graded.");	
+			gradeRepo.save(grade);
+		}
+		//Assign default grades to garysAssignment2
+		for (Student student : garysStudents) {
+			Grade grade = new Grade();
+			grade.setAssignment(garysAssignment2);
 			grade.setStudent(student);
 			grade.setLetterGradeValue("Not graded.");	
 			gradeRepo.save(grade);
