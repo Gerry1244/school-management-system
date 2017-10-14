@@ -20,7 +20,7 @@ public class Grade {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(length=2, nullable=true)
+	@Column(length=20, nullable=true)
 	private String letterGradeValue;
 	
 	@ManyToOne

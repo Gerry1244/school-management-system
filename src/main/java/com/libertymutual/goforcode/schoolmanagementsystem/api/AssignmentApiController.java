@@ -18,9 +18,11 @@ import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.CreateAssignmentModel;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Grade;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.GradeRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
@@ -35,12 +37,14 @@ public class AssignmentApiController {
 	private AssignmentRepository assignmentRepo;
 	private StudentRepository studentRepo;
 	private TeacherRepository teacherRepo;
+	private GradeRepository gradeRepo;
 
 	public AssignmentApiController(AssignmentRepository assignmentRepo, StudentRepository studentRepo,
-			TeacherRepository teacherRepo) {
+								 TeacherRepository teacherRepo, GradeRepository gradeRepo) {
 		this.assignmentRepo = assignmentRepo;
 		this.studentRepo = studentRepo;
 		this.teacherRepo = teacherRepo;
+		this.gradeRepo = gradeRepo;
 
 	}
 
@@ -102,6 +106,7 @@ public class AssignmentApiController {
 	public AssignmentDto createAndAssociateToStudents(@RequestBody CreateAssignmentModel assignment) {
 		List<Student> students;
 		Teacher teacher;
+		
 		Assignment newAssignment = new Assignment(assignment.getName(), assignment.getDescription(),
 				assignment.getDueDate(), assignment.getComment());
 		try {
@@ -109,6 +114,14 @@ public class AssignmentApiController {
 			students = studentRepo.findByTeacher(teacher);
 			if (teacher != null && students != null) {
 				newAssignment.setStudents(students);
+				for (Student student : students) {
+					Grade grade = new Grade();
+					grade.setAssignment(newAssignment);
+					grade.setStudent(student);
+					grade.setLetterGradeValue("Not graded.");	
+					gradeRepo.save(grade);
+				}
+			
 				assignmentRepo.save(newAssignment);
 				return new AssignmentDto(newAssignment);
 			} else

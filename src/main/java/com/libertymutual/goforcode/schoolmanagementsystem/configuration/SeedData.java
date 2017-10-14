@@ -9,11 +9,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Admin;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Announcement;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Grade;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AdminRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AnnouncementRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.GradeRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
@@ -24,7 +26,8 @@ import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepos
 public class SeedData {
 	
 	public SeedData(UserRepository userRepository, PasswordEncoder encoder, StudentRepository studentRepo, 
-					TeacherRepository teacherRepo, AdminRepository adminRepo, AssignmentRepository assignmentRepo, AnnouncementRepository announcementRepo) {
+					TeacherRepository teacherRepo, AdminRepository adminRepo, AssignmentRepository assignmentRepo, 
+					AnnouncementRepository announcementRepo,  GradeRepository gradeRepo) {
 		Teacher garyTheTeacher = new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 5, "TEACHER");
 		teacherRepo.save(garyTheTeacher);
 		
@@ -41,13 +44,25 @@ public class SeedData {
 		studentRepo.save(student3);
 		List<Student> garysStudents = studentRepo.findByTeacher(garyTheTeacher);
 		
+		
 		Assignment garysAssignment = new Assignment("Gary Gossage's assignment for 7th grade class");
 		Assignment garysAssignment2 = new Assignment("Gary Gossage's second assignment for 7th grade class");
 		garysAssignment.setStudents(garysStudents);
-		assignmentRepo.save(garysAssignment);
+		
 		garysAssignment2.setStudents(garysStudents);
+		
+		assignmentRepo.save(garysAssignment);
 		assignmentRepo.save(garysAssignment2);
-	
+		
+		for (Student student : garysStudents) {
+			Grade grade = new Grade();
+			grade.setAssignment(garysAssignment);
+			grade.setStudent(student);
+			grade.setLetterGradeValue("Not graded.");	
+			gradeRepo.save(grade);
+		}
+		
+		
 		//------------------ 8============================D  ~ ~ ~ ~ ~ --------------------//
 		//Orphan data
 		
