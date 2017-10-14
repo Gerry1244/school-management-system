@@ -1,5 +1,6 @@
 package com.libertymutual.goforcode.schoolmanagementsystem.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
+import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.CreateAssignmentModel;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
@@ -44,10 +46,19 @@ public class AssignmentApiController {
 
 	@ApiOperation(value = "Get a list of all of the assignments.")
 	@GetMapping("")
-	public List<Assignment> getAll() {
+	public List<AssignmentDto> getAll() {
+		List<Assignment> assignments;
+		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
 		try {
-			List<Assignment> assignments = assignmentRepo.findAll();
-			return assignments;
+			assignments = assignmentRepo.findAll();
+			if (assignments != null) {
+				for (Assignment assignment : assignments) {
+					AssignmentDto assignmentDto = new AssignmentDto(assignment);
+					assignmentsDto.add(assignmentDto);
+				}
+				return assignmentsDto;
+			} else
+				return null;
 		} catch (Exception e) {
 			System.err.println("Teacher getAll() failed: " + e.getClass().getName());
 			return null;
@@ -66,6 +77,31 @@ public class AssignmentApiController {
 		}
 	}
 
+	@ApiOperation(value = "Get a list of students assigned to a particular assignment.")
+	@GetMapping("{id}/students")
+	public List<StudentDto> getAllStudentsByAssignment(@PathVariable long id) {
+		List<Student> students;
+		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
+		try {
+			Assignment assignment = assignmentRepo.findOne(id);
+			if (assignment != null) {
+				students = assignment.getStudents();
+				for (Student student : students) {
+					StudentDto studentDto = new StudentDto(student);
+					studentsDto.add(studentDto);
+				}
+				return studentsDto;
+			} else
+				return null;
+		} catch (EmptyResultDataAccessException erdae) {
+			System.err.println("Assignment id: " + id + " not found. Error: " + erdae);
+			return null;
+		} catch (Exception e) {
+			System.err.println("Student getAllStudentsByAssignment() failed: " + e.getClass().getName());
+			return null;
+		}
+	}
+	
 	@ApiOperation(value = "Creates a new assignment, and associate it to all students under the teacher.")
 	@PostMapping("")
 	public AssignmentDto createAndAssociateToStudents(@RequestBody CreateAssignmentModel assignment) {
@@ -75,10 +111,13 @@ public class AssignmentApiController {
 				assignment.getDueDate(), assignment.getComment());
 		try {
 			teacher = teacherRepo.findOne(assignment.getTeacherId());
-			students = studentRepo.findByTeacher(teacher);
-			newAssignment.setStudents(students);
-			assignmentRepo.save(newAssignment);
-			return new AssignmentDto(newAssignment);
+				students = studentRepo.findByTeacher(teacher);
+				if (teacher != null && students != null) {
+				newAssignment.setStudents(students);
+				assignmentRepo.save(newAssignment);
+				return new AssignmentDto(newAssignment);
+			} else
+				return null;
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("createAndAssociateToStudents failed:" + erdae);
 			return null;
@@ -111,20 +150,6 @@ public class AssignmentApiController {
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Assignment id: " + id + " not found. Error: " + erdae);
 			return null;
-		}
-	}
-
-	@ApiOperation(value = "Get a list of students assigned to a particular assignment.")
-	@GetMapping("{id}/students")
-	public List<Student> getAllStudentsByAssignment(@PathVariable long id) {
-		try {
-			Assignment individualAssignment = assignmentRepo.findOne(id);
-			List<Student> studentList = individualAssignment.getStudents();
-			return studentList;
-		} catch (EmptyResultDataAccessException erdae) {
-			System.err.println("Assignment id: " + id + " not found. Error: " + erdae);
-			return null;
-
 		}
 	}
 

@@ -53,9 +53,9 @@ public class StudentApiController {
 	@GetMapping("{id}/assignments")
 	public List<Assignment> getAllAssignmentsByStudent(@PathVariable long id) {
 		try {
-			Student individualStudent = studentRepo.findOne(id);
-			List<Assignment> assignmentList = individualStudent.getAssignments();
-			return assignmentList;
+			Student student = studentRepo.findOne(id);
+			List<Assignment> assignments = student.getAssignments();
+			return assignments;
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Student id: " + id + " not found. Error: " + erdae);
 			return null;
@@ -67,7 +67,6 @@ public class StudentApiController {
 	public List<StudentDto> getAll() {
 		List<Student> students;
 		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
-
 		try {
 			students = studentRepo.findAll();
 			for (Student student : students) {
