@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.TeacherDto;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
 import io.swagger.annotations.Api;
@@ -27,9 +30,11 @@ import io.swagger.annotations.ApiOperation;
 public class TeacherApiController {
 
 	private TeacherRepository teacherRepo;
+	private AssignmentRepository assignmentRepo;
 
-	public TeacherApiController(TeacherRepository teacherRepo) {
+	public TeacherApiController(TeacherRepository teacherRepo, AssignmentRepository assignmentRepo) {
 		this.teacherRepo = teacherRepo;
+		this.assignmentRepo = assignmentRepo;
 	}
 
 	@ApiOperation(value = "Get a specific teacher by id.")
@@ -102,4 +107,25 @@ public class TeacherApiController {
 
 	}
 
+	@ApiOperation(value = "Get a full list of assignments for a teacher.")
+	@GetMapping("{id}/assignments")
+	public List<AssignmentDto> getAllAssigmentsByTeacher(@PathVariable long id) {
+		List<Assignment> assignments;
+		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
+		try {
+			Teacher teacher = teacherRepo.findOne(id);
+			assignments = assignmentRepo.findByTeacher(teacher);
+			if (assignments != null) {
+				for (Assignment assignment : assignments) {
+					AssignmentDto assignmentDto = new AssignmentDto(assignment);
+					assignmentsDto.add(assignmentDto);
+				}
+			}
+			return assignmentsDto;
+		} catch (EmptyResultDataAccessException erdae) {
+			System.err.println("Teaher id: " + id + " not found. Error: " + erdae);
+			return null;
+		}
+
+	}
 }

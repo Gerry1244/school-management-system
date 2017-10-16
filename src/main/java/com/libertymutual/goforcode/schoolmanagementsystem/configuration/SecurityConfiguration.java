@@ -26,13 +26,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
 		protected void configure(HttpSecurity http) throws Exception {
 			http
 				.authorizeRequests()
-				.antMatchers("/**").permitAll()
-//				.antMatchers(HttpMethod.POST, "/api/teachers", "/api/students/*").hasRole("ADMIN")
-//				.antMatchers(HttpMethod.POST, "/api/assignments").hasAnyRole("TEACHER", "ADMIN")
+				.antMatchers("/**").permitAll()	
+//				.antMatchers("/").permitAll()	
+//				.antMatchers(HttpMethod.POST, "/api/teachers", "/api/students/*", "api/users/signup").hasRole("ADMIN")
+//				.antMatchers(HttpMethod.POST, "/api/assignments", "/api/announcements").hasAnyRole("TEACHER", "ADMIN")
+//				.antMatchers(HttpMethod.DELETE, "/api/assignments/*", "/api/announcements/*").hasAnyRole("TEACHER", "ADMIN")
 //				.antMatchers(HttpMethod.DELETE, "/api/teachers/*", "/api/students/*").hasRole("ADMIN")
-//				.antMatchers(HttpMethod.PUT, "/api/teachers/*", "/api/students/*").hasRole("ADMIN")
-//				.antMatchers(HttpMethod.PUT, "/api/session").permitAll()
-//				.antMatchers(HttpMethod.DELETE, "/api/session").permitAll()
+//				.antMatchers(HttpMethod.PUT, "/api/session", "api/users", "/api/teachers/*", "/api/students/*", "/api/announcements/*" ).hasRole("ADMIN")
+//				.antMatchers(HttpMethod.PUT, "/api/assignments/*").hasAnyRole("TEACHER", "ADMIN")
 //				.antMatchers(HttpMethod.GET, "/api/teachers", "/api/students", "/api/assignments", "/api/assignments/*").permitAll()
 //				.antMatchers(HttpMethod.OPTIONS).permitAll()
 				.anyRequest().authenticated() //any request that comes through security pipeline has to be authenticated					
