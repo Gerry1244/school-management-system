@@ -29,7 +29,7 @@ public class SeedData {
 					TeacherRepository teacherRepo, AdminRepository adminRepo, AssignmentRepository assignmentRepo, 
 					AnnouncementRepository announcementRepo,  GradeRepository gradeRepo) {
 		Teacher garyTheTeacher = new Teacher("Gary", "Gossage", "gg@gmail.com", encoder.encode("password"), 5, "TEACHER");
-		teacherRepo.save(garyTheTeacher);
+		garyTheTeacher = teacherRepo.save(garyTheTeacher);
 		
 		Student student1 = new Student("Richard", "Sandoval", "rs@gmail.com", encoder.encode("password"), 5, "STUDENT");
 		Student student2 = new Student("Lenny", "Kravitz", "lc@gmail.com", encoder.encode("password"), 5, "STUDENT");

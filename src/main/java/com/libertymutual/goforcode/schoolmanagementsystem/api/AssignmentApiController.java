@@ -144,6 +144,11 @@ public class AssignmentApiController {
 	public AssignmentDto delete(@PathVariable long id) {
 		try {
 			Assignment assignment = assignmentRepo.findOne(id);
+			for (Grade g : assignment.getGrades()) {
+				g.setAssignment(null);
+				gradeRepo.save(g);
+//				gradeRepo.delete(g);
+			}
 			assignmentRepo.delete(id);
 			return new AssignmentDto(assignment);
 		} catch (EmptyResultDataAccessException erdae) {

@@ -19,7 +19,7 @@ public class Teacher extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	@OneToMany(fetch=FetchType.EAGER, mappedBy = "teacher", cascade=CascadeType.ALL)
+	@OneToMany(fetch=FetchType.EAGER, mappedBy = "teacher")
 	List<Assignment> assignments;
 	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy = "teacher", cascade=CascadeType.ALL)

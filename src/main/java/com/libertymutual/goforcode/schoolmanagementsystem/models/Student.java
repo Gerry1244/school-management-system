@@ -21,7 +21,7 @@ public class Student extends User {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@ManyToMany(fetch=FetchType.EAGER, mappedBy = "students", cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.EAGER, mappedBy = "students")
 	List<Assignment> assignments;
 	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="student", cascade=CascadeType.ALL)
