@@ -47,14 +47,14 @@ public class SeedData {
 		
 		Assignment garysAssignment = new Assignment("Your first essay", "Gary Gossage's Essay assignment for 7th grade class", "You kids are done for", garyTheTeacher);
 		Assignment garysAssignment2 = new Assignment("Derivatives", "Gary Gossage's Math assignment for 7th grade class", "You math idiots are done for :P", garyTheTeacher);
-		Assignment garysAssignment3 = new Assignment("Gary Gossage's second assignment for 7th grade class");
+		
 		garysAssignment.setStudents(garysStudents);
 		garysAssignment2.setStudents(garysStudents);
-		garysAssignment3.setStudents(garysStudents);
+		
 		
 		assignmentRepo.save(garysAssignment);
 		assignmentRepo.save(garysAssignment2);
-		assignmentRepo.save(garysAssignment3);
+		
 		
 		//Assign default grades to garysAssignment
 		for (Student student : garysStudents) {
@@ -73,14 +73,6 @@ public class SeedData {
 			gradeRepo.save(grade);
 		}
 		
-		//Assign default grades to garysAssignment2
-				for (Student student : garysStudents) {
-					Grade grade = new Grade();
-					grade.setAssignment(garysAssignment3);
-					grade.setStudent(student);
-					grade.setLetterGradeValue("Not graded.");	
-					gradeRepo.save(grade);
-				}
 		
 		
 		//------------------ 8============================D  ~ ~ ~ ~ ~ --------------------//
@@ -89,7 +81,7 @@ public class SeedData {
 		studentRepo.save(new Student("Little", "Jimmy", "lj@gmail.com", encoder.encode("password"), 6, "STUDENT"));	
 		teacherRepo.save(new Teacher("Matt", "Meyers", "mm@gmail.com", encoder.encode("password"), 5, "TEACHER"));
 		adminRepo.save(new Admin("Mary", "Richards", "mr@gmail.com", encoder.encode("password"), "ADMIN"));	
-		assignmentRepo.save(new Assignment("Essay on some dumb topic"));
+		//assignmentRepo.save(new Assignment("Essay on some dumb topic"));
 		
 		announcementRepo.save(new Announcement("drawing", "draw some shit"));
 		announcementRepo.save(new Announcement("The Iron Yard is closing.", "We weren't very profitable so we're closing"));
