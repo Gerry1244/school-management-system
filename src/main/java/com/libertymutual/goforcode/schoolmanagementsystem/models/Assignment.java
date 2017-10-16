@@ -60,6 +60,21 @@ public class Assignment {
 		this.dueDate = dueDate;
 		this.comment= comment;
 	}
+	
+	public Assignment(String name, String description, Date dueDate, String comment, Teacher teacher) {
+		this.name = name;
+		this.description = description;
+		this.dueDate = dueDate;
+		this.comment= comment;
+		this.teacher = teacher;
+	}
+	
+	public Assignment(String name, String description, String comment, Teacher teacher) {
+		this.name = name;
+		this.description = description;
+		this.comment= comment;
+		this.teacher = teacher;
+	}
 
 	public Long getId() {
 		return id;

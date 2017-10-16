@@ -33,5 +33,9 @@ public class AssignmentDto {
 		return assignment.getComment();
 
 	}
+	
+	public Long getTeacherId() {
+		return assignment.getTeacher().getId();
+	}
 
 }

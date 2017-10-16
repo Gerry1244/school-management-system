@@ -107,13 +107,17 @@ public class AssignmentApiController {
 		List<Student> students;
 		Teacher teacher;
 		
-		Assignment newAssignment = new Assignment(assignment.getName(), assignment.getDescription(),
-				assignment.getDueDate(), assignment.getComment());
+		
 		try {
 			teacher = teacherRepo.findOne(assignment.getTeacherId());
 			students = studentRepo.findByTeacher(teacher);
+			
+			Assignment newAssignment = new Assignment(assignment.getName(), assignment.getDescription(),
+					assignment.getDueDate(), assignment.getComment(), teacher);
+			
 			if (teacher != null && students != null) {
 				newAssignment.setStudents(students);
+				assignmentRepo.save(newAssignment);
 				for (Student student : students) {
 					Grade grade = new Grade();
 					grade.setAssignment(newAssignment);
@@ -122,7 +126,7 @@ public class AssignmentApiController {
 					gradeRepo.save(grade);
 				}
 			
-				assignmentRepo.save(newAssignment);
+				
 				return new AssignmentDto(newAssignment);
 			} else
 				return null;

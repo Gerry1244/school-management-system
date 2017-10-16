@@ -45,14 +45,16 @@ public class SeedData {
 		List<Student> garysStudents = studentRepo.findByTeacher(garyTheTeacher);
 		
 		
-		Assignment garysAssignment = new Assignment("Gary Gossage's assignment for 7th grade class");
-		Assignment garysAssignment2 = new Assignment("Gary Gossage's second assignment for 7th grade class");
+		Assignment garysAssignment = new Assignment("Your first essay", "Gary Gossage's Essay assignment for 7th grade class", "You kids are done for", garyTheTeacher);
+		Assignment garysAssignment2 = new Assignment("Derivatives", "Gary Gossage's Math assignment for 7th grade class", "You math idiots are done for :P", garyTheTeacher);
+		Assignment garysAssignment3 = new Assignment("Gary Gossage's second assignment for 7th grade class");
 		garysAssignment.setStudents(garysStudents);
-		
 		garysAssignment2.setStudents(garysStudents);
+		garysAssignment3.setStudents(garysStudents);
 		
 		assignmentRepo.save(garysAssignment);
 		assignmentRepo.save(garysAssignment2);
+		assignmentRepo.save(garysAssignment3);
 		
 		//Assign default grades to garysAssignment
 		for (Student student : garysStudents) {
@@ -70,6 +72,15 @@ public class SeedData {
 			grade.setLetterGradeValue("Not graded.");	
 			gradeRepo.save(grade);
 		}
+		
+		//Assign default grades to garysAssignment2
+				for (Student student : garysStudents) {
+					Grade grade = new Grade();
+					grade.setAssignment(garysAssignment3);
+					grade.setStudent(student);
+					grade.setLetterGradeValue("Not graded.");	
+					gradeRepo.save(grade);
+				}
 		
 		
 		//------------------ 8============================D  ~ ~ ~ ~ ~ --------------------//
