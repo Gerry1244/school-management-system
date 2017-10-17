@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Grade;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.User;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.GradeRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
@@ -37,12 +39,14 @@ public class StudentApiController {
 	private TeacherRepository teacherRepo;
 	private GradeRepository gradeRepo;
 	private AssignmentRepository assignmentRepo;
+	private PasswordEncoder encoder;
 
-	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo, GradeRepository gradeRepo, AssignmentRepository assignmentRepo) {
+	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo, GradeRepository gradeRepo, AssignmentRepository assignmentRepo, PasswordEncoder encoder) {
 		this.studentRepo = studentRepo;
 		this.teacherRepo = teacherRepo;
 		this.gradeRepo = gradeRepo;
 		this.assignmentRepo = assignmentRepo;
+		this.encoder = encoder;
 	}
 
 	@ApiOperation(value = "Get a specific student by id.")
@@ -101,6 +105,7 @@ public class StudentApiController {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
 			if (teacher != null) {
+				student.setPassword(encoder.encode(student.getPassword()));
 				student.setTeacher(teacher);
 				studentRepo.save(student);
 				return new StudentDto(student);

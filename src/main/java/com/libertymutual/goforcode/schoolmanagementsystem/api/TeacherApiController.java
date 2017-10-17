@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,11 +35,13 @@ public class TeacherApiController {
 	private TeacherRepository teacherRepo;
 	private AssignmentRepository assignmentRepo;
 	private StudentRepository studentRepo;
+	private PasswordEncoder encoder;
 
-	public TeacherApiController(TeacherRepository teacherRepo, AssignmentRepository assignmentRepo, StudentRepository studentRepo) {
+	public TeacherApiController(TeacherRepository teacherRepo, AssignmentRepository assignmentRepo, StudentRepository studentRepo, PasswordEncoder encoder) {
 		this.teacherRepo = teacherRepo;
 		this.assignmentRepo = assignmentRepo;
 		this.studentRepo = studentRepo;
+		this.encoder = encoder;
 	}
 
 	@ApiOperation(value = "Get a specific teacher by id.")
@@ -73,6 +76,7 @@ public class TeacherApiController {
 	@PostMapping("")
 	public TeacherDto create(@RequestBody Teacher teacher) {
 		try {
+			teacher.setPassword(encoder.encode(teacher.getPassword()));
 			teacherRepo.save(teacher);
 			return new TeacherDto(teacher);
 		} catch (DataIntegrityViolationException dive) {
