@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentDto;
+import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentFullDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Grade;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
@@ -55,12 +56,12 @@ public class StudentApiController {
 		this.userRepo = userRepo;
 	}
 
-	@ApiOperation(value = "Get a specific student by id.")
+	@ApiOperation(value = "Get a specific student by id including password.")
 	@GetMapping("{id}")
-	public StudentDto getOne(@PathVariable long id) {
+	public StudentFullDto getOne(@PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(id);
-			return new StudentDto(student);
+			return new StudentFullDto(student);
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Student id: " + id + " not found. Error: " + erdae);
 			return null;
@@ -175,6 +176,7 @@ public class StudentApiController {
 	@ApiOperation(value = "Update a student.")
 	@PutMapping("{id}")
 	public StudentDto update(@RequestBody Student student, @PathVariable long id) {
+		student.getPassword();
 		try {
 			student.setId(id);
 			studentRepo.save(student);

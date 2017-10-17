@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.TeacherDto;
+import com.libertymutual.goforcode.schoolmanagementsystem.dto.TeacherFullDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
@@ -50,12 +51,12 @@ public class TeacherApiController {
 		this.encoder = encoder;
 	}
 
-	@ApiOperation(value = "Get a specific teacher by id.")
+	@ApiOperation(value = "Get a specific teacher by id including password.")
 	@GetMapping("{id}")
-	public TeacherDto getOne(@PathVariable long id) {
+	public TeacherFullDto getOne(@PathVariable long id) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
-			return new TeacherDto(teacher);
+			return new TeacherFullDto(teacher);
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Teacher id: " + id + " not found. Error: " + erdae);
 			return null;
