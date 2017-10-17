@@ -3,6 +3,8 @@ package com.libertymutual.goforcode.schoolmanagementsystem.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ import com.libertymutual.goforcode.schoolmanagementsystem.repositories.Assignmen
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.GradeRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,13 +43,16 @@ public class StudentApiController {
 	private GradeRepository gradeRepo;
 	private AssignmentRepository assignmentRepo;
 	private PasswordEncoder encoder;
+	private UserRepository userRepo;
 
-	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo, GradeRepository gradeRepo, AssignmentRepository assignmentRepo, PasswordEncoder encoder) {
+	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo, GradeRepository gradeRepo,
+			AssignmentRepository assignmentRepo, PasswordEncoder encoder, UserRepository userRepo) {
 		this.studentRepo = studentRepo;
 		this.teacherRepo = teacherRepo;
 		this.gradeRepo = gradeRepo;
 		this.assignmentRepo = assignmentRepo;
 		this.encoder = encoder;
+		this.userRepo = userRepo;
 	}
 
 	@ApiOperation(value = "Get a specific student by id.")
@@ -101,27 +107,32 @@ public class StudentApiController {
 
 	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
 	@PostMapping("{id}")
-	public StudentDto createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id) {
+	public StudentDto createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id, HttpServletResponse response) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
-			if (teacher != null) {
+			User existingStudent = userRepo.findByEmail(student.getEmail());
+			if (teacher != null && existingStudent == null && student.getRoleName().equals("STUDENT")) {
 				student.setPassword(encoder.encode(student.getPassword()));
 				student.setTeacher(teacher);
 				studentRepo.save(student);
 				return new StudentDto(student);
-			} else {
-				System.err.println("Teacher id: " + id + " not found");
+			} else if (existingStudent != null) {
+				System.err.println("Student already exists with the the email: " + student.getEmail());
+				response.setStatus(400);
 				return null;
-			}
+			}		
+			else
+				return null;
 		} catch (DataIntegrityViolationException dive) {
 			System.err.println("Student in request body was not valid: " + dive);
 			return null;
 		}
 	}
-	
+
 	@ApiOperation(value = "Associate an existing student to a teacher.")
 	@PutMapping("{id}/teachers/{teacherId}")
-	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id, @PathVariable long teacherId) {
+	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id,
+			@PathVariable long teacherId) {
 		try {
 			Teacher teacher = teacherRepo.findOne(teacherId);
 			if (teacher != null) {
@@ -176,7 +187,5 @@ public class StudentApiController {
 			return null;
 		}
 	}
-	
-	
 
 }

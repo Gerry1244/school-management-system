@@ -3,6 +3,8 @@ package com.libertymutual.goforcode.schoolmanagementsystem.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +22,11 @@ import com.libertymutual.goforcode.schoolmanagementsystem.dto.TeacherDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.User;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,8 +40,10 @@ public class TeacherApiController {
 	private AssignmentRepository assignmentRepo;
 	private StudentRepository studentRepo;
 	private PasswordEncoder encoder;
+	private UserRepository userRepo;
 
-	public TeacherApiController(TeacherRepository teacherRepo, AssignmentRepository assignmentRepo, StudentRepository studentRepo, PasswordEncoder encoder) {
+	public TeacherApiController(TeacherRepository teacherRepo, AssignmentRepository assignmentRepo,
+			StudentRepository studentRepo, PasswordEncoder encoder, UserRepository userRepo) {
 		this.teacherRepo = teacherRepo;
 		this.assignmentRepo = assignmentRepo;
 		this.studentRepo = studentRepo;
@@ -74,11 +80,18 @@ public class TeacherApiController {
 
 	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("")
-	public TeacherDto create(@RequestBody Teacher teacher) {
+	public TeacherDto create(@RequestBody Teacher teacher, HttpServletResponse response) {
 		try {
-			teacher.setPassword(encoder.encode(teacher.getPassword()));
-			teacherRepo.save(teacher);
-			return new TeacherDto(teacher);
+			User existingTeacher = userRepo.findByEmail(teacher.getEmail());
+			if (existingTeacher == null && teacher.getRoleName().equals("TEACHER")) {
+				teacher.setPassword(encoder.encode(teacher.getPassword()));
+				teacherRepo.save(teacher);
+				return new TeacherDto(teacher);
+			}
+			System.err.println("Teacher already exists with the the email: " + teacher.getEmail());
+			response.setStatus(400);
+			return null;
+
 		} catch (DataIntegrityViolationException dive) {
 			System.err.println("Teacher in request body was not valid: " + dive);
 			return null;
