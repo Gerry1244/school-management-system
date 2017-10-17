@@ -3,8 +3,6 @@ package com.libertymutual.goforcode.schoolmanagementsystem.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Grade;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.GradeRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
@@ -34,10 +35,14 @@ public class StudentApiController {
 
 	private StudentRepository studentRepo;
 	private TeacherRepository teacherRepo;
+	private GradeRepository gradeRepo;
+	private AssignmentRepository assignmentRepo;
 
-	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo) {
+	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo, GradeRepository gradeRepo, AssignmentRepository assignmentRepo) {
 		this.studentRepo = studentRepo;
 		this.teacherRepo = teacherRepo;
+		this.gradeRepo = gradeRepo;
+		this.assignmentRepo = assignmentRepo;
 	}
 
 	@ApiOperation(value = "Get a specific student by id.")
@@ -114,6 +119,15 @@ public class StudentApiController {
 	public StudentDto delete(@PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(id);
+			List<Assignment> assignments = student.getAssignments();
+			for (Assignment a : assignments) {
+				a.getStudents().remove(student);
+				assignmentRepo.save(a);
+			}
+			for (Grade g : student.getGrades()) {
+				g.setStudent(null);
+				gradeRepo.save(g);
+			}
 			studentRepo.delete(id);
 			return new StudentDto(student);
 		} catch (EmptyResultDataAccessException erdae) {

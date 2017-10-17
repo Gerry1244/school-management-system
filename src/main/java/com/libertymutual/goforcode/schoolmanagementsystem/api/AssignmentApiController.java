@@ -147,7 +147,6 @@ public class AssignmentApiController {
 			for (Grade g : assignment.getGrades()) {
 				g.setAssignment(null);
 				gradeRepo.save(g);
-//				gradeRepo.delete(g);
 			}
 			assignmentRepo.delete(id);
 			return new AssignmentDto(assignment);

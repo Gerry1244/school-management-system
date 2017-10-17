@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.GradeDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Grade;
