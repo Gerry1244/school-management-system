@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.TeacherDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
+import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.AssignmentRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
 import io.swagger.annotations.Api;
@@ -31,10 +33,12 @@ public class TeacherApiController {
 
 	private TeacherRepository teacherRepo;
 	private AssignmentRepository assignmentRepo;
+	private StudentRepository studentRepo;
 
-	public TeacherApiController(TeacherRepository teacherRepo, AssignmentRepository assignmentRepo) {
+	public TeacherApiController(TeacherRepository teacherRepo, AssignmentRepository assignmentRepo, StudentRepository studentRepo) {
 		this.teacherRepo = teacherRepo;
 		this.assignmentRepo = assignmentRepo;
+		this.studentRepo = studentRepo;
 	}
 
 	@ApiOperation(value = "Get a specific teacher by id.")
@@ -82,6 +86,16 @@ public class TeacherApiController {
 	public TeacherDto delete(@PathVariable long id) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
+			List<Assignment> assignments = teacher.getAssignments();
+			List<Student> students = studentRepo.findByTeacher(teacher);
+			for (Assignment a : assignments) {
+				a.setTeacher(null);
+				assignmentRepo.save(a);
+			}
+			for (Student s : students) {
+				s.setTeacher(null);
+				studentRepo.save(s);
+			}
 			teacherRepo.delete(id);
 			return new TeacherDto(teacher);
 		} catch (EmptyResultDataAccessException erdae) {

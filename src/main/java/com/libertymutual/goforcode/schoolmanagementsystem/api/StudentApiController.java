@@ -113,6 +113,26 @@ public class StudentApiController {
 			return null;
 		}
 	}
+	
+	@ApiOperation(value = "Associate an existing student to a teacher.")
+	@PutMapping("{id}/teachers/{teacherId}")
+	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id, @PathVariable long teacherId) {
+		try {
+			Teacher teacher = teacherRepo.findOne(teacherId);
+			if (teacher != null) {
+				student.setTeacher(teacher);
+				student.setId(id);
+				studentRepo.save(student);
+				return new StudentDto(student);
+			} else {
+				System.err.println("Teacher id: " + id + " not found");
+				return null;
+			}
+		} catch (DataIntegrityViolationException dive) {
+			System.err.println("Student in request body was not valid: " + dive);
+			return null;
+		}
+	}
 
 	@ApiOperation(value = "Delete a student.")
 	@DeleteMapping("{id}")
@@ -151,5 +171,7 @@ public class StudentApiController {
 			return null;
 		}
 	}
+	
+	
 
 }
