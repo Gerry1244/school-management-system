@@ -43,12 +43,12 @@ public class UserApiController {
 //		String password = user.getPassword();
 //		String encryptedPassword = encoder.encode(password);
 //		user.setPassword(encryptedPassword);
-		final String roleName = user.getRoleName();
+		//final String roleName = user.getRoleName();
 		User newUser = new User(user.getFirstName(), user.getLastName(), user.getEmail(), encoder.encode(user.getPassword()), user.getRoleName());
 
-//		try {
-//			userRepo.save(newUser);
-//		}
+		
+		userRepo.save(newUser);
+	
 		return newUser;
 		//watcher = watchers.save(watcher);
 		

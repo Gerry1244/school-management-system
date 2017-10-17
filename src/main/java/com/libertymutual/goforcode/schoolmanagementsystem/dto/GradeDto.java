@@ -18,6 +18,10 @@ public class GradeDto {
 		return grade.getLetterGradeValue();
 	}
 	
+	public String getGradeComment() {
+		return grade.getComment();
+	}
+	
 	public Long getGradeAssignmentId() {
 		return grade.getAssignment().getId();
 	}

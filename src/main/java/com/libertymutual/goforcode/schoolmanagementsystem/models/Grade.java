@@ -23,6 +23,9 @@ public class Grade {
 	@Column(length=20, nullable=true)
 	private String letterGradeValue;
 	
+	@Column(length=500, nullable=true)
+	private String Comment;
+	
 	@ManyToOne
 	Assignment assignment;
 	
@@ -72,6 +75,18 @@ public class Grade {
 
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+
+
+
+	public String getComment() {
+		return Comment;
+	}
+
+
+
+	public void setComment(String comment) {
+		Comment = comment;
 	}
 
 }
