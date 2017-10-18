@@ -24,7 +24,7 @@ public class Grade {
 	private String letterGradeValue;
 	
 	@Column(length=500, nullable=true)
-	private String Comment;
+	private String comment;
 	
 	@ManyToOne
 	Assignment assignment;
@@ -80,13 +80,13 @@ public class Grade {
 
 
 	public String getComment() {
-		return Comment;
+		return comment;
 	}
 
 
 
 	public void setComment(String comment) {
-		Comment = comment;
+		this.comment = comment;
 	}
 
 }
