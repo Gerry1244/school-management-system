@@ -125,6 +125,12 @@ public class TeacherApiController {
 	@ApiOperation(value = "Update a teacher.")
 	@PutMapping("{id}")
 	public TeacherDto update(@RequestBody Teacher teacher, @PathVariable long id) {
+		String submittedPassword = teacher.getPassword();
+		String databasePassword = teacherRepo.findOne(id).getPassword();
+		if (!submittedPassword.equals(databasePassword)) {
+			String encodedPassword = encoder.encode(submittedPassword);
+			teacher.setPassword(encodedPassword);
+		}
 		try {
 			teacher.setId(id);
 			teacherRepo.save(teacher);

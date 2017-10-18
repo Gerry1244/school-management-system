@@ -176,7 +176,12 @@ public class StudentApiController {
 	@ApiOperation(value = "Update a student.")
 	@PutMapping("{id}")
 	public StudentDto update(@RequestBody Student student, @PathVariable long id) {
-		student.getPassword();
+		String submittedPassword = student.getPassword();
+		String databasePassword = studentRepo.findOne(id).getPassword();
+		if (!submittedPassword.equals(databasePassword)) {
+			String encodedPassword = encoder.encode(submittedPassword);
+			student.setPassword(encodedPassword);
+		}
 		try {
 			student.setId(id);
 			studentRepo.save(student);

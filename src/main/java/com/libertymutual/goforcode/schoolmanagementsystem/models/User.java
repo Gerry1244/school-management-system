@@ -38,7 +38,7 @@ public class User implements UserDetails {
 	protected String password;
 	
 	@Column(length= 75, nullable=false)
-	String roleName;
+	protected String roleName;
 
 	public User() {
 	}

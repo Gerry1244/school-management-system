@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.models.User;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
-import com.libertymutual.goforcode.schoolmanagementsystem.services.SchoolUserDetailsService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -24,9 +22,8 @@ public class UserApiController {
 	
 	private UserRepository userRepo;
 	private PasswordEncoder encoder;
-	private SchoolUserDetailsService schoolUserDetails;
 
-	public UserApiController(UserRepository userRepo, PasswordEncoder encoder, SchoolUserDetailsService schoolUserDetails) {
+	public UserApiController(UserRepository userRepo, PasswordEncoder encoder) {
 		this.userRepo = userRepo;
 	}
 	
