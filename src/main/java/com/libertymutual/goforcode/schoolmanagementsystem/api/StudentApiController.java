@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentFullDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
@@ -67,47 +66,9 @@ public class StudentApiController {
 			return null;
 		}
 	}
-
-	@ApiOperation(value = "Get a list of all of the assignments by student id.")
-	@GetMapping("students/{id}/assignments")
-	public List<AssignmentDto> getAllAssignmentsByStudent(@PathVariable long id) {
-		List<Assignment> assignments;
-		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
-		try {
-			Student student = studentRepo.findOne(id);
-			if (student != null) {
-				assignments = student.getAssignments();
-				for (Assignment assignment : assignments) {
-					AssignmentDto assignmentDto = new AssignmentDto(assignment);
-					assignmentsDto.add(assignmentDto);
-				}
-				return assignmentsDto;
-			}
-			return null;
-		} catch (EmptyResultDataAccessException erdae) {
-			System.err.println("Student id: " + id + " not found. Error: " + erdae);
-			return null;
-		}
-	}
-
-	@ApiOperation(value = "Get a list of all of the students.")
-	@GetMapping("students")
-	public List<StudentDto> getAll() {
-		List<Student> students;
-		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
-		students = studentRepo.findAll();
-		if (students != null) {
-			for (Student student : students) {
-				StudentDto studentDto = new StudentDto(student);
-				studentsDto.add(studentDto);
-			}
-			return studentsDto;
-		}
-		return null;
-	}
-
+	
 	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
-	@PostMapping("students/{id}")
+	@PostMapping({"students/{id}", "teachers/{id}/students"})
 	public StudentDto createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id, HttpServletResponse response) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
@@ -129,28 +90,7 @@ public class StudentApiController {
 			return null;
 		}
 	}
-
-	@ApiOperation(value = "Associate an existing student to a teacher.")
-	@PutMapping("students/{id}/teachers/{teacherId}")
-	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id,
-			@PathVariable long teacherId) {
-		try {
-			Teacher teacher = teacherRepo.findOne(teacherId);
-			if (teacher != null) {
-				student.setTeacher(teacher);
-				student.setId(id);
-				studentRepo.save(student);
-				return new StudentDto(student);
-			} else {
-				System.err.println("Teacher id: " + id + " not found");
-				return null;
-			}
-		} catch (DataIntegrityViolationException dive) {
-			System.err.println("Student in request body was not valid: " + dive);
-			return null;
-		}
-	}
-
+	
 	@ApiOperation(value = "Delete a student.")
 	@DeleteMapping("students/{id}")
 	public StudentDto delete(@PathVariable long id) {
@@ -173,6 +113,49 @@ public class StudentApiController {
 		}
 	}
 
+	
+
+//	@ApiOperation(value = "Get a list of all of the students.")
+//	@GetMapping("students")
+//	public List<StudentDto> getAll() {
+//		List<Student> students;
+//		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
+//		students = studentRepo.findAll();
+//		if (students != null) {
+//			for (Student student : students) {
+//				StudentDto studentDto = new StudentDto(student);
+//				studentsDto.add(studentDto);
+//			}
+//			return studentsDto;
+//		}
+//		return null;
+//	}
+
+	
+
+	@ApiOperation(value = "Associate an existing student to a teacher.")
+	@PutMapping({"students/{id}/teachers/{teacherId}", "teacher/{teacherId}/student/{id}/teachers"})
+	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id,
+			@PathVariable long teacherId) {
+		try {
+			Teacher teacher = teacherRepo.findOne(teacherId);
+			if (teacher != null) {
+				student.setTeacher(teacher);
+				student.setId(id);
+				studentRepo.save(student);
+				return new StudentDto(student);
+			} else {
+				System.err.println("Teacher id: " + id + " not found");
+				return null;
+			}
+		} catch (DataIntegrityViolationException dive) {
+			System.err.println("Student in request body was not valid: " + dive);
+			return null;
+		}
+	}
+
+	
+
 	@ApiOperation(value = "Update a student.")
 	@PutMapping("students/{id}")
 	public StudentDto update(@RequestBody Student student, @PathVariable long id) {
@@ -191,6 +174,31 @@ public class StudentApiController {
 			return null;
 		} catch (DataIntegrityViolationException dive) {
 			System.err.println("Student in request body was not valid: " + dive);
+			return null;
+		}
+	}
+	
+	@ApiOperation(value = "Get a list of students assigned to a particular assignment, by assignment Id.")
+	@GetMapping("assignments/{id}/students")
+	public List<StudentDto> getAllStudentsByAssignment(@PathVariable long id) {
+		List<Student> students;
+		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
+		try {
+			Assignment assignment = assignmentRepo.findOne(id);
+			if (assignment != null) {
+				students = assignment.getStudents();
+				for (Student student : students) {
+					StudentDto studentDto = new StudentDto(student);
+					studentsDto.add(studentDto);
+				}
+				return studentsDto;
+			} else
+				return null;
+		} catch (EmptyResultDataAccessException erdae) {
+			System.err.println("Assignment id: " + id + " not found. Error: " + erdae);
+			return null;
+		} catch (Exception e) {
+			System.err.println("Student getAllStudentsByAssignment() failed: " + e.getClass().getName());
 			return null;
 		}
 	}

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.TeacherDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.TeacherFullDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
@@ -64,21 +63,21 @@ public class TeacherApiController {
 		}
 	}
 
-	@ApiOperation(value = "Get a list of teachers.")
-	@GetMapping("teachers")
-	public List<TeacherDto> getAll() {
-		List<Teacher> teachers;
-		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
-		teachers = teacherRepo.findAll();
-		if (teachers != null) {
-			for (Teacher teacher : teachers) {
-				TeacherDto teacherDto = new TeacherDto(teacher);
-				teachersDto.add(teacherDto);
-			}
-			return teachersDto;
-		} else
-			return null;
-	}
+//	@ApiOperation(value = "Get a list of teachers.")
+//	@GetMapping("teachers")
+//	public List<TeacherDto> getAll() {
+//		List<Teacher> teachers;
+//		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
+//		teachers = teacherRepo.findAll();
+//		if (teachers != null) {
+//			for (Teacher teacher : teachers) {
+//				TeacherDto teacherDto = new TeacherDto(teacher);
+//				teachersDto.add(teacherDto);
+//			}
+//			return teachersDto;
+//		} else
+//			return null;
+//	}
 
 	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("teachers")
@@ -146,23 +145,23 @@ public class TeacherApiController {
 
 	}
 
-	@ApiOperation(value = "Get a full list of assignments for a teacher.")
-	@GetMapping("teachers/{id}/assignments")
-	public List<AssignmentDto> getAllAssigmentsByTeacher(@PathVariable long id) {
-		List<Assignment> assignments;
-		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
+	@ApiOperation(value = "Get a list of teachers by grade level.")
+	@GetMapping("grade-level/{gradeLevel}/teachers")
+	public List<TeacherDto> getAllTeachersByGradeLevel(@PathVariable Integer gradeLevel) {
+		List<Teacher> teachers;
+		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
 		try {
-			Teacher teacher = teacherRepo.findOne(id);
-			assignments = assignmentRepo.findByTeacher(teacher);
-			if (assignments != null) {
-				for (Assignment assignment : assignments) {
-					AssignmentDto assignmentDto = new AssignmentDto(assignment);
-					assignmentsDto.add(assignmentDto);
+			teachers = teacherRepo.findByGradeLevel(gradeLevel);
+			if (teachers != null) {
+				for (Teacher teacher : teachers) {
+					TeacherDto teacherDto = new TeacherDto(teacher);
+					teachersDto.add(teacherDto);
 				}
+				return teachersDto;
 			}
-			return assignmentsDto;
+			return null;
 		} catch (EmptyResultDataAccessException erdae) {
-			System.err.println("Teaher id: " + id + " not found. Error: " + erdae);
+			System.err.println("Grade level " + gradeLevel + " not found. Error: " + erdae);
 			return null;
 		}
 

@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.schoolmanagementsystem.dto.AssignmentDto;
-import com.libertymutual.goforcode.schoolmanagementsystem.dto.StudentDto;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Assignment;
-import com.libertymutual.goforcode.schoolmanagementsystem.models.CreateAssignmentModel;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Grade;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
@@ -75,41 +73,60 @@ public class AssignmentApiController {
 			return null;
 		}
 	}
-
-	@ApiOperation(value = "Get a list of students assigned to a particular assignment.")
-	@GetMapping("assignments/{id}/students")
-	public List<StudentDto> getAllStudentsByAssignment(@PathVariable long id) {
-		List<Student> students;
-		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
+	
+	@ApiOperation(value = "Get a list of all of the assignments by student id.")
+	@GetMapping("students/{id}/assignments")
+	public List<AssignmentDto> getAllAssignmentsByStudent(@PathVariable long id) {
+		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
 		try {
-			Assignment assignment = assignmentRepo.findOne(id);
-			if (assignment != null) {
-				students = assignment.getStudents();
-				for (Student student : students) {
-					StudentDto studentDto = new StudentDto(student);
-					studentsDto.add(studentDto);
+			Student student = studentRepo.findOne(id);
+			if (student != null) {
+				List<Grade> grades = student.getGrades();
+				for (Grade g : grades) {
+					AssignmentDto assignmentDto = new AssignmentDto(g.getAssignment());
+					assignmentsDto.add(assignmentDto);
 				}
-				return studentsDto;
-			} else
-				return null;
-		} catch (EmptyResultDataAccessException erdae) {
-			System.err.println("Assignment id: " + id + " not found. Error: " + erdae);
+				return assignmentsDto;
+			}
 			return null;
-		} catch (Exception e) {
-			System.err.println("Student getAllStudentsByAssignment() failed: " + e.getClass().getName());
+		} catch (EmptyResultDataAccessException erdae) {
+			System.err.println("Student id: " + id + " not found. Error: " + erdae);
 			return null;
 		}
 	}
+	
+	@ApiOperation(value = "Get a full list of assignments for a teacher.")
+	@GetMapping("teachers/{id}/assignments")
+	public List<AssignmentDto> getAllAssigmentsByTeacher(@PathVariable long id) {
+		List<Assignment> assignments;
+		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
+		try {
+			Teacher teacher = teacherRepo.findOne(id);
+			assignments = assignmentRepo.findByTeacher(teacher);
+			if (assignments != null) {
+				for (Assignment assignment : assignments) {
+					AssignmentDto assignmentDto = new AssignmentDto(assignment);
+					assignmentsDto.add(assignmentDto);
+				}
+			}
+			return assignmentsDto;
+		} catch (EmptyResultDataAccessException erdae) {
+			System.err.println("Teaher id: " + id + " not found. Error: " + erdae);
+			return null;
+		}
 
+	}
+
+	
 	@ApiOperation(value = "Creates a new assignment, and associate it to all students under the teacher.")
-	@PostMapping("assignments")
-	public AssignmentDto createAndAssociateToStudents(@RequestBody CreateAssignmentModel assignment) {
+	@PostMapping({"assignments", "teachers/{id}/assignments"})
+	public AssignmentDto createAssignmentAndAssociateToStudents(@RequestBody Assignment assignment, @PathVariable long id) {
 		List<Student> students;
 		Teacher teacher;
 		
 		
 		try {
-			teacher = teacherRepo.findOne(assignment.getTeacherId());
+			teacher = teacherRepo.findOne(id);
 			students = studentRepo.findByTeacher(teacher);
 			
 			Assignment newAssignment = new Assignment(assignment.getName(), assignment.getDescription(),
