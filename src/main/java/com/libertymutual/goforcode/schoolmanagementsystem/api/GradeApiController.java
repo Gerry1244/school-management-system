@@ -113,6 +113,7 @@ public class GradeApiController {
 			Grade updatedGrade = new Grade();
 			updatedGrade.setId(id);
 			updatedGrade.setLetterGradeValue(grade.getLetterGradeValue());
+			updatedGrade.setComment(grade.getComment());
 			updatedGrade.setAssignment(assignment);
 			updatedGrade.setStudent(student);
 			gradeRepo.save(updatedGrade);

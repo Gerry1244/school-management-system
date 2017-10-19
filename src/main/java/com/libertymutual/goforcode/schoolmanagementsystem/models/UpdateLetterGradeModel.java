@@ -6,6 +6,7 @@ public class UpdateLetterGradeModel {
 	private String letterGradeValue;
 	private Long gradeStudentId;
 	private Long gradeAssignmentId;
+	private String comment;
 	public Long getId() {
 		return id;
 	}
@@ -29,6 +30,12 @@ public class UpdateLetterGradeModel {
 	}
 	public void setGradeAssignmentId(Long gradeAssignmentId) {
 		this.gradeAssignmentId = gradeAssignmentId;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
 
