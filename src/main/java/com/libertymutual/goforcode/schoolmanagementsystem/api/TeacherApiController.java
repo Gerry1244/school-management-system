@@ -49,6 +49,7 @@ public class TeacherApiController {
 		this.assignmentRepo = assignmentRepo;
 		this.studentRepo = studentRepo;
 		this.encoder = encoder;
+		this.userRepo = userRepo;
 	}
 
 	@ApiOperation(value = "Get a specific teacher by id including password.")
