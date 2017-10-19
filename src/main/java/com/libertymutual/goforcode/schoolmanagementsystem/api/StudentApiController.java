@@ -35,7 +35,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api")
 @Api(description = "Use this to get all, create, delete, and update students. This controller also handles getting assignments by student id.")
 public class StudentApiController {
 
@@ -57,7 +57,7 @@ public class StudentApiController {
 	}
 
 	@ApiOperation(value = "Get a specific student by id including password.")
-	@GetMapping("{id}")
+	@GetMapping("students/{id}")
 	public StudentFullDto getOne(@PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(id);
@@ -69,7 +69,7 @@ public class StudentApiController {
 	}
 
 	@ApiOperation(value = "Get a list of all of the assignments by student id.")
-	@GetMapping("{id}/assignments")
+	@GetMapping("students/{id}/assignments")
 	public List<AssignmentDto> getAllAssignmentsByStudent(@PathVariable long id) {
 		List<Assignment> assignments;
 		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
@@ -91,7 +91,7 @@ public class StudentApiController {
 	}
 
 	@ApiOperation(value = "Get a list of all of the students.")
-	@GetMapping("")
+	@GetMapping("students")
 	public List<StudentDto> getAll() {
 		List<Student> students;
 		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
@@ -107,7 +107,7 @@ public class StudentApiController {
 	}
 
 	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
-	@PostMapping("{id}")
+	@PostMapping("students/{id}")
 	public StudentDto createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id, HttpServletResponse response) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
@@ -131,7 +131,7 @@ public class StudentApiController {
 	}
 
 	@ApiOperation(value = "Associate an existing student to a teacher.")
-	@PutMapping("{id}/teachers/{teacherId}")
+	@PutMapping("students/{id}/teachers/{teacherId}")
 	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id,
 			@PathVariable long teacherId) {
 		try {
@@ -152,7 +152,7 @@ public class StudentApiController {
 	}
 
 	@ApiOperation(value = "Delete a student.")
-	@DeleteMapping("{id}")
+	@DeleteMapping("students/{id}")
 	public StudentDto delete(@PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(id);
@@ -174,7 +174,7 @@ public class StudentApiController {
 	}
 
 	@ApiOperation(value = "Update a student.")
-	@PutMapping("{id}")
+	@PutMapping("students/{id}")
 	public StudentDto update(@RequestBody Student student, @PathVariable long id) {
 		String submittedPassword = student.getPassword();
 		String databasePassword = studentRepo.findOne(id).getPassword();

@@ -33,7 +33,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/teachers")
+@RequestMapping("/api")
 @Api(description = "Use this to get all, create, delete, and update teachers.")
 public class TeacherApiController {
 
@@ -52,7 +52,7 @@ public class TeacherApiController {
 	}
 
 	@ApiOperation(value = "Get a specific teacher by id including password.")
-	@GetMapping("{id}")
+	@GetMapping("teachers/{id}")
 	public TeacherFullDto getOne(@PathVariable long id) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
@@ -64,7 +64,7 @@ public class TeacherApiController {
 	}
 
 	@ApiOperation(value = "Get a list of teachers.")
-	@GetMapping("")
+	@GetMapping("teachers")
 	public List<TeacherDto> getAll() {
 		List<Teacher> teachers;
 		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
@@ -80,7 +80,7 @@ public class TeacherApiController {
 	}
 
 	@ApiOperation(value = "Create a new teacher.")
-	@PostMapping("")
+	@PostMapping("teachers")
 	public TeacherDto create(@RequestBody Teacher teacher, HttpServletResponse response) {
 		try {
 			User existingTeacher = userRepo.findByEmail(teacher.getEmail());
@@ -100,7 +100,7 @@ public class TeacherApiController {
 	}
 
 	@ApiOperation(value = "Delete a teacher.")
-	@DeleteMapping("{id}")
+	@DeleteMapping("teachers/{id}")
 	public TeacherDto delete(@PathVariable long id) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
@@ -123,7 +123,7 @@ public class TeacherApiController {
 	}
 
 	@ApiOperation(value = "Update a teacher.")
-	@PutMapping("{id}")
+	@PutMapping("teachers/{id}")
 	public TeacherDto update(@RequestBody Teacher teacher, @PathVariable long id) {
 		String submittedPassword = teacher.getPassword();
 		String databasePassword = teacherRepo.findOne(id).getPassword();
@@ -146,7 +146,7 @@ public class TeacherApiController {
 	}
 
 	@ApiOperation(value = "Get a full list of assignments for a teacher.")
-	@GetMapping("{id}/assignments")
+	@GetMapping("teachers/{id}/assignments")
 	public List<AssignmentDto> getAllAssigmentsByTeacher(@PathVariable long id) {
 		List<Assignment> assignments;
 		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();

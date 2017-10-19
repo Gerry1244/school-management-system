@@ -25,7 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/grades")
+@RequestMapping("/api")
 @Api(description = "This controller deals with grades.")
 public class GradeApiController {
 
@@ -41,7 +41,7 @@ public class GradeApiController {
 	}
 	
 	@ApiOperation(value = "Get a single grade by id")
-	@GetMapping("{id}")
+	@GetMapping("grades/{id}")
 	public GradeDto getOne(@PathVariable long id) {
 		Grade grade = gradeRepo.findOne(id);
 		if (grade != null) {
@@ -52,7 +52,7 @@ public class GradeApiController {
 	}
 
 	@ApiOperation(value = "Get a full list of all grades for all assignments and students")
-	@GetMapping("")
+	@GetMapping("grades")
 	public List<GradeDto> getAll() {
 		List<Grade> grades;
 		List<GradeDto> gradesDto = new ArrayList<GradeDto>();
@@ -69,7 +69,7 @@ public class GradeApiController {
 	}
 
 	@ApiOperation(value = "Get all the grades for a particular assignment")
-	@GetMapping("assignments/{id}")
+	@GetMapping("grades/assignments/{id}")
 	public List<GradeDto> getAllGradesForAnAssignment(@PathVariable long id) {
 		List<Grade> grades;
 		List<GradeDto> gradesDto = new ArrayList<GradeDto>();
@@ -87,7 +87,7 @@ public class GradeApiController {
 	}
 
 	@ApiOperation(value = "Get all the grades for a particular assignment")
-	@GetMapping("students/{id}")
+	@GetMapping("grades/students/{id}")
 	public List<GradeDto> getAllGradesForAStudent(@PathVariable long id) {
 		List<Grade> grades;
 		List<GradeDto> gradesDto = new ArrayList<GradeDto>();
@@ -105,7 +105,7 @@ public class GradeApiController {
 	}
 
 	@ApiOperation(value = "Update a grade. The RequestBody must send letterGradeValue, gradeStudentId, & gradeAssignmentId")
-	@PutMapping("{id}")
+	@PutMapping("grades/{id}")
 	public GradeDto update(@RequestBody UpdateLetterGradeModel grade, @PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(grade.getGradeStudentId());

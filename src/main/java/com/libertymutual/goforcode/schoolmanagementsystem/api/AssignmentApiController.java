@@ -30,7 +30,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/assignments")
+@RequestMapping("/api")
 @Api(description = "Use this to get all, create, delete, and update assignments.")
 public class AssignmentApiController {
 
@@ -49,7 +49,7 @@ public class AssignmentApiController {
 	}
 
 	@ApiOperation(value = "Get a list of all of the assignments.")
-	@GetMapping("")
+	@GetMapping("assignments")
 	public List<AssignmentDto> getAll() {
 		List<Assignment> assignments;
 		List<AssignmentDto> assignmentsDto = new ArrayList<AssignmentDto>();
@@ -65,7 +65,7 @@ public class AssignmentApiController {
 	}
 
 	@ApiOperation(value = "Get a specific assignment by id.")
-	@GetMapping("{id}")
+	@GetMapping("assignments/{id}")
 	public AssignmentDto getOne(@PathVariable long id) {
 		try {
 			Assignment assignment = assignmentRepo.findOne(id);
@@ -77,7 +77,7 @@ public class AssignmentApiController {
 	}
 
 	@ApiOperation(value = "Get a list of students assigned to a particular assignment.")
-	@GetMapping("{id}/students")
+	@GetMapping("assignments/{id}/students")
 	public List<StudentDto> getAllStudentsByAssignment(@PathVariable long id) {
 		List<Student> students;
 		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
@@ -102,7 +102,7 @@ public class AssignmentApiController {
 	}
 
 	@ApiOperation(value = "Creates a new assignment, and associate it to all students under the teacher.")
-	@PostMapping("")
+	@PostMapping("assignments")
 	public AssignmentDto createAndAssociateToStudents(@RequestBody CreateAssignmentModel assignment) {
 		List<Student> students;
 		Teacher teacher;
@@ -140,7 +140,7 @@ public class AssignmentApiController {
 	}
 
 	@ApiOperation(value = "Delete an assignment.")
-	@DeleteMapping("{id}")
+	@DeleteMapping("assignments/{id}")
 	public AssignmentDto delete(@PathVariable long id) {
 		try {
 			Assignment assignment = assignmentRepo.findOne(id);
@@ -157,7 +157,7 @@ public class AssignmentApiController {
 	}
 
 	@ApiOperation(value = "Update an assignment.")
-	@PutMapping("{id}")
+	@PutMapping("assignments/{id}")
 	public AssignmentDto update(@RequestBody Assignment assignment, @PathVariable long id) {
 		try {
 			Teacher teacher = assignmentRepo.findOne(id).getTeacher();

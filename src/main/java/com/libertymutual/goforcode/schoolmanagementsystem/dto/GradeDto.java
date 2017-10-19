@@ -18,7 +18,7 @@ public class GradeDto {
 		return grade.getLetterGradeValue();
 	}
 	
-	public String getGradeComment() {
+	public String getComment() {
 		return grade.getComment();
 	}
 	

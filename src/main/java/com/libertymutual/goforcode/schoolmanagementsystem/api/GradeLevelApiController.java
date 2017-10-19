@@ -17,7 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api/grade-level")
+@RequestMapping("/api")
 @Api(description = "Controller handles gradelevels (e.g. 5th grade)")
 public class GradeLevelApiController {
 
@@ -28,7 +28,7 @@ public class GradeLevelApiController {
 	}
 
 	@ApiOperation(value = "Get a list of teachers by grade level.")
-	@GetMapping("{gradeLevel}/teachers")
+	@GetMapping("grade-level/{gradeLevel}/teachers")
 	public List<TeacherDto> getAllTeachersByGradeLevel(@PathVariable Integer gradeLevel) {
 		List<Teacher> teachers;
 		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
