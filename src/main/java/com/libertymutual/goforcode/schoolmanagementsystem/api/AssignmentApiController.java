@@ -160,7 +160,9 @@ public class AssignmentApiController {
 	@PutMapping("{id}")
 	public AssignmentDto update(@RequestBody Assignment assignment, @PathVariable long id) {
 		try {
+			Teacher teacher = assignmentRepo.findOne(id).getTeacher();
 			assignment.setId(id);
+			assignment.setTeacher(teacher);
 			assignmentRepo.save(assignment);
 			return new AssignmentDto(assignment);
 		} catch (DataIntegrityViolationException dive) {
