@@ -115,21 +115,21 @@ public class StudentApiController {
 
 	
 
-//	@ApiOperation(value = "Get a list of all of the students.")
-//	@GetMapping("students")
-//	public List<StudentDto> getAll() {
-//		List<Student> students;
-//		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
-//		students = studentRepo.findAll();
-//		if (students != null) {
-//			for (Student student : students) {
-//				StudentDto studentDto = new StudentDto(student);
-//				studentsDto.add(studentDto);
-//			}
-//			return studentsDto;
-//		}
-//		return null;
-//	}
+	@ApiOperation(value = "Get a list of all of the students.")
+	@GetMapping("students")
+	public List<StudentDto> getAll() {
+		List<Student> students;
+		List<StudentDto> studentsDto = new ArrayList<StudentDto>();
+		students = studentRepo.findAll();
+		if (students != null) {
+			for (Student student : students) {
+				StudentDto studentDto = new StudentDto(student);
+				studentsDto.add(studentDto);
+			}
+			return studentsDto;
+		}
+		return null;
+	}
 
 	
 

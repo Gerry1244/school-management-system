@@ -63,21 +63,21 @@ public class TeacherApiController {
 		}
 	}
 
-//	@ApiOperation(value = "Get a list of teachers.")
-//	@GetMapping("teachers")
-//	public List<TeacherDto> getAll() {
-//		List<Teacher> teachers;
-//		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
-//		teachers = teacherRepo.findAll();
-//		if (teachers != null) {
-//			for (Teacher teacher : teachers) {
-//				TeacherDto teacherDto = new TeacherDto(teacher);
-//				teachersDto.add(teacherDto);
-//			}
-//			return teachersDto;
-//		} else
-//			return null;
-//	}
+	@ApiOperation(value = "Get a list of teachers.")
+	@GetMapping("teachers")
+	public List<TeacherDto> getAll() {
+		List<Teacher> teachers;
+		List<TeacherDto> teachersDto = new ArrayList<TeacherDto>();
+		teachers = teacherRepo.findAll();
+		if (teachers != null) {
+			for (Teacher teacher : teachers) {
+				TeacherDto teacherDto = new TeacherDto(teacher);
+				teachersDto.add(teacherDto);
+			}
+			return teachersDto;
+		} else
+			return null;
+	}
 
 	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("teachers")
