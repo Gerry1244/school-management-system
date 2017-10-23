@@ -29,6 +29,8 @@ import com.libertymutual.goforcode.schoolmanagementsystem.repositories.GradeRepo
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.services.EmailApiService;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,15 +46,17 @@ public class StudentApiController {
 	private AssignmentRepository assignmentRepo;
 	private PasswordEncoder encoder;
 	private UserRepository userRepo;
+	private EmailApiService emailService;
 
 	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo, GradeRepository gradeRepo,
-			AssignmentRepository assignmentRepo, PasswordEncoder encoder, UserRepository userRepo) {
+			AssignmentRepository assignmentRepo, PasswordEncoder encoder, UserRepository userRepo, EmailApiService emailService) {
 		this.studentRepo = studentRepo;
 		this.teacherRepo = teacherRepo;
 		this.gradeRepo = gradeRepo;
 		this.assignmentRepo = assignmentRepo;
 		this.encoder = encoder;
 		this.userRepo = userRepo;
+		this.emailService = emailService;
 	}
 
 	@ApiOperation(value = "Get a specific student by id including password.")
@@ -69,7 +73,7 @@ public class StudentApiController {
 
 	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
 	@PostMapping({ "students/{id}", "teachers/{id}/students" })
-	public StudentDto createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id,
+	public StudentDto createStudentAndAssociateTeacher(@RequestBody Student student, @PathVariable long id,
 			HttpServletResponse response) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
@@ -78,6 +82,15 @@ public class StudentApiController {
 				student.setPassword(encoder.encode(student.getPassword()));
 				student.setTeacher(teacher);
 				studentRepo.save(student);
+				
+				try {
+					emailService.sendSimpleMessage(student.getEmail());
+				
+				} catch (UnirestException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				return new StudentDto(student);
 			} else if (existingStudent != null) {
 				System.err.println("Student already exists with the the email: " + student.getEmail());
