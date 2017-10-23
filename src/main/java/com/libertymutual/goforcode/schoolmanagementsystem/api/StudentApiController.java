@@ -49,7 +49,8 @@ public class StudentApiController {
 	private EmailApiService emailService;
 
 	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo, GradeRepository gradeRepo,
-			AssignmentRepository assignmentRepo, PasswordEncoder encoder, UserRepository userRepo, EmailApiService emailService) {
+			AssignmentRepository assignmentRepo, PasswordEncoder encoder, UserRepository userRepo,
+			EmailApiService emailService) {
 		this.studentRepo = studentRepo;
 		this.teacherRepo = teacherRepo;
 		this.gradeRepo = gradeRepo;
@@ -71,10 +72,9 @@ public class StudentApiController {
 		}
 	}
 
-	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
+	@ApiOperation(value = "Create a new student and send confirmation email to student email address. This also associated the student with passed in teacher id")
 	@PostMapping({ "students/{id}", "teachers/{id}/students" })
-	public StudentDto createStudentAndAssociateTeacher(@RequestBody Student student, @PathVariable long id,
-			HttpServletResponse response) {
+	public StudentDto create(@RequestBody Student student, @PathVariable long id, HttpServletResponse response) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
 			User existingStudent = userRepo.findByEmail(student.getEmail());
@@ -82,15 +82,15 @@ public class StudentApiController {
 				student.setPassword(encoder.encode(student.getPassword()));
 				student.setTeacher(teacher);
 				studentRepo.save(student);
-				
+
 				try {
 					emailService.sendSimpleMessage(student.getEmail());
-				
+
 				} catch (UnirestException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				return new StudentDto(student);
 			} else if (existingStudent != null) {
 				System.err.println("Student already exists with the the email: " + student.getEmail());
@@ -144,8 +144,7 @@ public class StudentApiController {
 
 	@ApiOperation(value = "Update a student")
 	@PutMapping({ "students/{id}/teachers/{teacherId}", "teachers/{teacherId}/students/{id}" })
-	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id,
-			@PathVariable long teacherId) {
+	public StudentDto update(@RequestBody Student student, @PathVariable long id, @PathVariable long teacherId) {
 		String submittedPassword = student.getPassword();
 		String databasePassword = studentRepo.findOne(id).getPassword();
 		if (!submittedPassword.equals(databasePassword)) {
