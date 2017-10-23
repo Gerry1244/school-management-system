@@ -34,7 +34,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api") 
 @Api(description = "Use this to get all, create, delete, and update students. This controller also handles getting assignments by student id.")
 public class StudentApiController {
 
@@ -63,7 +63,7 @@ public class StudentApiController {
 			return new StudentFullDto(student);
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Student id: " + id + " not found. Error: " + erdae);
-			return null;
+			return null; 
 		}
 	}
 	
@@ -81,7 +81,7 @@ public class StudentApiController {
 			} else if (existingStudent != null) {
 				System.err.println("Student already exists with the the email: " + student.getEmail());
 				response.setStatus(400);
-				return null;
+				return null; 
 			}		
 			else
 				return null;
@@ -132,7 +132,6 @@ public class StudentApiController {
 	}
 
 	
-
 	@ApiOperation(value = "Associate an existing student to a teacher.")
 	@PutMapping({"students/{id}/teachers/{teacherId}", "teacher/{teacherId}/student/{id}/teachers"})
 	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id,

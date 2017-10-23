@@ -124,7 +124,7 @@ public class AssignmentApiController {
 		List<Student> students;
 		Teacher teacher;
 		
-		
+		 
 		try {
 			teacher = teacherRepo.findOne(id);
 			students = studentRepo.findByTeacher(teacher);

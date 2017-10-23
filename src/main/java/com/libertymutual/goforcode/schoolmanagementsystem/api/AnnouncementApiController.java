@@ -33,7 +33,7 @@ public class AnnouncementApiController {
 	@GetMapping("{id}")
 	public Announcement getOne(@PathVariable long id) {
 		try {
-			Announcement announcement = announcementRepo.findOne(id);
+			Announcement announcement = announcementRepo.findOne(id); 
 			return announcement;
 		} catch (EmptyResultDataAccessException erdae) {
 			return null;
