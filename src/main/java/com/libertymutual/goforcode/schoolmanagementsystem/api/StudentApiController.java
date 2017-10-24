@@ -85,7 +85,7 @@ public class StudentApiController {
 
 				try {
 					emailService.sendSimpleMessage(student.getEmail());
-
+					System.out.println(student.getEmail());
 				} catch (UnirestException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
