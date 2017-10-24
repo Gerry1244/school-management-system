@@ -104,7 +104,7 @@ public class TeacherApiController {
 				return new TeacherDto(teacher);
 			}
 			System.err.println("Teacher already exists with the the email: " + teacher.getEmail());
-			response.setStatus(400);
+			response.setStatus(409);
 			return null;
 
 		} catch (DataIntegrityViolationException dive) {
