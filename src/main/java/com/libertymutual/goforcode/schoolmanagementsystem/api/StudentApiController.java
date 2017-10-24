@@ -94,7 +94,7 @@ public class StudentApiController {
 				return new StudentDto(student);
 			} else if (existingStudent != null) {
 				System.err.println("Student already exists with the the email: " + student.getEmail());
-				response.setStatus(400);
+				response.setStatus(409);
 				return null;
 			} else
 				return null;
