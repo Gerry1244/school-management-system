@@ -65,7 +65,8 @@ public class StudentApiController {
 	public StudentFullDto getOne(@PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(id);
-			return new StudentFullDto(student);
+			Long teacherId = student.getTeacher().getId();
+			return new StudentFullDto(student, teacherId);
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Student id: " + id + " not found. Error: " + erdae);
 			return null;
