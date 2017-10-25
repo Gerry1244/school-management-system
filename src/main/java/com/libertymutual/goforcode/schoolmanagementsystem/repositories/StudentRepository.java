@@ -11,6 +11,6 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
 	
-	List<Student> findByTeacher(String string);
+	List<Student> findByTeacher(Teacher teacher);
 
 }

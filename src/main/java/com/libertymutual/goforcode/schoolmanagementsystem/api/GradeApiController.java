@@ -40,6 +40,10 @@ public class GradeApiController {
 		this.studentRepo = studentRepo;
 	}
 	
+	
+	
+	
+	
 	@ApiOperation(value = "Get a single grade by id")
 	@GetMapping("grades/{id}")
 	public GradeDto getOne(@PathVariable long id) {
@@ -50,6 +54,8 @@ public class GradeApiController {
 			System.err.println("Could not find grade with this id");  
 			return null;
 	}
+	
+	
 
 	@ApiOperation(value = "Get a full list of all grades for all assignments and students")
 	@GetMapping("grades")
@@ -63,7 +69,7 @@ public class GradeApiController {
 				GradeDto gradeDto = new GradeDto(grade);
 				gradesDto.add(gradeDto);
 			}
-			return gradesDto;
+			return gradesDto; 
 		} else
 			return null;
 	}

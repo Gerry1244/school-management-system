@@ -205,7 +205,7 @@ public class TeacherApiTests {
 	public void test_teacher_is_deleted_when_delete_is_called() {
 		//arrange
 		Teacher teacher = new Teacher("Rick", "Morty", "rm@gmail.com", "password", 8, "TEACHER"); 
-		List<Student> students = studentRepository.findByTeacher("teacher");
+		List<Student> students = studentRepository.findByTeacher(teacher);
 		when(students).thenReturn(students);
 		when(encoder.encode("password")).thenReturn("Api Test");
 		
