@@ -26,7 +26,7 @@ public class EmailApiService {
 				.post("https://api.mailgun.net/v3/" + "sandboxf39f405f504940fb9ce6cb2115b5d2e9.mailgun.org"
 						+ "/messages")
 				.basicAuth("api", key).queryString("from", "Excited User <USER@YOURDOMAIN.COM>")
-				.queryString("to", "jonpodspam@gmail.com").queryString("subject", "hello").queryString("html", html)
+				.queryString("to", email).queryString("subject", "Welcome!").queryString("html", html)
 				.asJson();
 
 		return request.getBody();
