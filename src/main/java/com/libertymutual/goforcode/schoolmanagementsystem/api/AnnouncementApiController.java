@@ -33,7 +33,7 @@ public class AnnouncementApiController {
 	@GetMapping("{id}")
 	public Announcement getOne(@PathVariable long id) {
 		try {
-			Announcement announcement = announcementRepo.findOne(id);
+			Announcement announcement = announcementRepo.findOne(id); 
 			return announcement;
 		} catch (EmptyResultDataAccessException erdae) {
 			return null;
@@ -49,7 +49,7 @@ public class AnnouncementApiController {
 	@ApiOperation(value = "Create a new announcement.")
 	@PostMapping("")
 	public Announcement create(@RequestBody Announcement announcement) {
-		return announcementRepo.save(announcement);
+		return announcementRepo.save(announcement);  
 	}
 	
 	@ApiOperation(value = "Delete an announcement.")

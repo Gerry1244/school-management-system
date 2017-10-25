@@ -72,7 +72,7 @@ public class Assignment {
 		this.name = name;
 		this.description = description;
 		this.comment= comment;
-		this.teacher = teacher;
+		this.teacher = teacher;  
 	}
 
 	public Long getId() {

@@ -31,7 +31,7 @@ public class Student extends User {
 	
 	
 	@Column(nullable=true)
-	private int gradeLevel;
+	private int gradeLevel;  
 	
 	public Student() {}
 	

@@ -49,7 +49,7 @@ public class SeedData {
 		Assignment garysAssignment2 = new Assignment("Derivatives", "Gary Gossage's Math assignment for 7th grade class", "You math idiots are done for :P", garyTheTeacher);
 		
 		garysAssignment.setStudents(garysStudents);
-		garysAssignment2.setStudents(garysStudents);
+		garysAssignment2.setStudents(garysStudents); 
 		
 		
 		assignmentRepo.save(garysAssignment);

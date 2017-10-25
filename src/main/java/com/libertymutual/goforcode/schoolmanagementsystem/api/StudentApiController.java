@@ -36,7 +36,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api") 
 @Api(description = "Use this to get all, create, delete, and update students. This controller also handles getting assignments by student id.")
 public class StudentApiController {
 
@@ -69,7 +69,7 @@ public class StudentApiController {
 			return new StudentFullDto(student, teacherId);
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Student id: " + id + " not found. Error: " + erdae);
-			return null;
+			return null; 
 		}
 	}
 
@@ -101,7 +101,7 @@ public class StudentApiController {
 				return null;
 		} catch (DataIntegrityViolationException dive) {
 			System.err.println("Student in request body was not valid: " + dive);
-			return null;
+			return null;  
 		}
 	}
 
@@ -168,7 +168,6 @@ public class StudentApiController {
 			return null;
 		}
 	}
-
 	@ApiOperation(value = "Get a list of students assigned to a particular assignment, by assignment Id.")
 	@GetMapping("assignments/{id}/students")
 	public List<StudentDto> getAllStudentsByAssignment(@PathVariable long id) {
