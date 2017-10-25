@@ -86,7 +86,7 @@ public class GradeApiController {
 		return null;
 	}
 
-	@ApiOperation(value = "Get all the grades for a particular assignment")
+	@ApiOperation(value = "Get all the grades for a particular student")
 	@GetMapping("grades/students/{id}")
 	public List<GradeDto> getAllGradesForAStudent(@PathVariable long id) {
 		List<Grade> grades;
