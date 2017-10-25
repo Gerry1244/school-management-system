@@ -47,7 +47,7 @@ public class GradeApiController {
 		if (grade != null) {
 			return new GradeDto(grade);
 		} else
-			System.err.println("Could not find grade with this id");
+			System.err.println("Could not find grade with this id");  
 			return null;
 	}
 

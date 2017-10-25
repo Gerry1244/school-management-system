@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,10 +24,10 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 
-public class StudentApiTests { 
+public class StudentApiTests {
 	private StudentRepository studentRepo;
 	private StudentApiController controller;
-	private TeacherRepository teacherRepo; 
+	private TeacherRepository teacherRepo;
 
 	@Before
 	public void setUp() {
@@ -47,22 +49,9 @@ public class StudentApiTests {
 		// Assert
 		assertThat(actual.size()).isEqualTo(2);
 		assertThat(controller.getAll().size()).isEqualTo(2);
-
+ 
 	}
 
-	@Test
-	public void test_null_is_returned_when_findOne_student_throws_EmptyResultDataAccessException() {
-		// arrange
-		when(studentRepo.findOne(1L)).thenThrow(new EmptyResultDataAccessException(0));
-
-		// act
-		List<AssignmentDto> actual = controller.getAllAssignmentsByStudent(1L);
-
-		// assert
-		assertThat(actual).isNull();
-		verify(studentRepo).findOne(1L);
-
-	}
 
 	@Test
 	public void setUp_test_create_students() {
@@ -71,12 +60,20 @@ public class StudentApiTests {
 		when(studentRepo.save(student)).thenReturn(student);
 
 		// act
-		Student actual = controller.create(student);
+		long id = 1L;
+		HttpServletResponse response = null;
+		StudentDto actual = controller.createAndAssociateTeacher(student, id, response);
 
 		// assert
-		assertThat(student).isSameAs(actual);
+		//assertThat(student).get(actual);
+		assertThat(student.getId()).isEqualTo(actual.getUserId());
+		assertThat(student.getFirstName()).isEqualTo(actual.getFirstName());
+		assertThat(student.getLastName()).isEqualTo(actual.getLastName());
+		assertThat(student.getRoleName()).isEqualTo(actual.getRoleName());
+		assertThat(student.getGradeLevel()).isEqualTo(actual.getGradeLevel());
 		verify(studentRepo).save(student);
-	}
+
+	}  
 
 	@Test
 	public void test_delete_students() {
@@ -85,13 +82,15 @@ public class StudentApiTests {
 		when(studentRepo.findOne(1L)).thenReturn(student);
 
 		// act
-		StudentDto actual = controller.delete(1L); 
+		StudentDto actual = controller.delete(1L);
 
 		// assert
 		// assertThat(student).isSameAs(actual);
 		verify(studentRepo).delete(1L);
 
 	}
+	
+
 
 	@Test
 	public void test_null_when_save_student_sends_EmptyResultDataAccessException() {
@@ -136,38 +135,8 @@ public class StudentApiTests {
 
 	}
 
-	@Test
-	public void test_null_when_teacher_does_not_exist() {
-		// Arrange
-		Teacher teacher = new Teacher();
-		Student student = new Student();
-
-		when(teacherRepo.save(teacher)).thenThrow(new DataIntegrityViolationException(null));
-
-		// act
-
-		StudentDto actual = controller.createAndAssociateTeacher(student, 1L);
-
-		// assert
-		assertThat(actual).isNull();
-
-	}
 
 	@Test
-	public void test_DataIntegrityViolatioException_when_teacher_does_not_exist() {
-		Student student = new Student();
-		Teacher teacher = new Teacher();
-		teacher = null;
-		try {
-			controller.createAndAssociateTeacher(student, teacher.getId());
-			fail("The controller did not throw the Data Integrity Violation Exception error when no teacher is found.");
-		} catch (DataIntegrityViolationException dive) {
-				
-			}
-			
-	}
-
-	 @Test
 	public void test_null_when_update_student_sends_DataIntegrityViolationException() {
 		// Arrange
 		Student student = new Student();
@@ -181,19 +150,19 @@ public class StudentApiTests {
 		assertThat(actual).isNull();
 
 	}
-	 
-	 @Test
-	 public void test_an_existing_student_is_associated_to_a_teacher() {
-		 //arrange
-		 Student student = new Student();
-		 Teacher teacher = new Teacher();
-		 when(studentRepo.findOne(1L)).thenReturn(student);
-		 
-		 //Act
-		 StudentDto actual = controller.associateAnExistingStudentToTeacher(student, 1L, 2L);
-		 
-		 //Assert
-		 assertThat(actual).isNull();
-	 }
+
+	@Test
+	public void test_an_existing_student_is_associated_to_a_teacher() {
+		// arrange
+		Student student = new Student();
+		Teacher teacher = new Teacher();
+		when(studentRepo.findOne(1L)).thenReturn(student);
+
+		// Act
+		StudentDto actual = controller.associateAnExistingStudentToTeacher(student, 1L, 2L);
+
+		// Assert
+		assertThat(actual).isNull();
+	}
 
 }

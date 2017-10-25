@@ -78,6 +78,7 @@ public class TeacherApiController {
 		} else
 			return null;
 	}
+	
 
 	@ApiOperation(value = "Create a new teacher.")
 	@PostMapping("teachers")
@@ -98,6 +99,11 @@ public class TeacherApiController {
 			return null;
 		}
 	}
+	
+	
+	
+	
+	
 
 	@ApiOperation(value = "Delete a teacher.")
 	@DeleteMapping("teachers/{id}")
@@ -121,6 +127,9 @@ public class TeacherApiController {
 			return null;
 		}
 	}
+	
+	
+	
 
 	@ApiOperation(value = "Update a teacher.")
 	@PutMapping("teachers/{id}")
@@ -144,6 +153,8 @@ public class TeacherApiController {
 		}
 
 	}
+	
+	
 
 	@ApiOperation(value = "Get a list of teachers by grade level.")
 	@GetMapping("grade-level/{gradeLevel}/teachers")

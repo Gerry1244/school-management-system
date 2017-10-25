@@ -21,8 +21,8 @@ public class GradeApiTests {
 	
 	@Before
 	public void setUp() {
-		gradeRepo = mock(GradeRepository.class);
-		controller = new GradeApiController(gradeRepo, null, null); 
+		gradeRepo = mock(GradeRepository.class);  
+		controller = new GradeApiController(gradeRepo, null, null);   
 	}
 
 
@@ -33,10 +33,11 @@ public class GradeApiTests {
 		grade.setId(1L);
 		when(gradeRepo.getOne(1L)).thenReturn(grade);
 		//Act
-		Grade actual = controller.update(grade, 1L);
+		long id = 1L;
+		Grade actual = controller.
 		
 		//Assert
-		assertThat(grade).isSameAs(actual); 
+		assertThat(grade.getLetterGradeValue()).isEqualTo(actual); 
 		verify(gradeRepo).save(grade); 
 	}
 

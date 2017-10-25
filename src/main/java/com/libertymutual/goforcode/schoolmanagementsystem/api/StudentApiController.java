@@ -87,7 +87,7 @@ public class StudentApiController {
 				return null;
 		} catch (DataIntegrityViolationException dive) {
 			System.err.println("Student in request body was not valid: " + dive);
-			return null;
+			return null;  
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class StudentApiController {
 			return null;
 		}
 	}
-
+  
 	
 
 	@ApiOperation(value = "Update a student.")

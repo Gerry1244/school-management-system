@@ -41,7 +41,7 @@ public class AssignmentApiController {
 								 TeacherRepository teacherRepo, GradeRepository gradeRepo) {
 		this.assignmentRepo = assignmentRepo;
 		this.studentRepo = studentRepo;
-		this.teacherRepo = teacherRepo;
+		this.teacherRepo = teacherRepo;  
 		this.gradeRepo = gradeRepo;
 
 	}

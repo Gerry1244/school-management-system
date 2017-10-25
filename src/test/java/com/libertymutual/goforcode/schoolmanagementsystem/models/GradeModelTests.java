@@ -21,7 +21,7 @@ public class GradeModelTests {
 		 Grade grade = new Grade("B+");
 		 
 		 //Assert
-		 
+		  
 		 assertThat(grade.getLetterGradeValue()).isEqualTo("B+");
 		 
 	 }

@@ -22,7 +22,7 @@ public class UserApiTests {
 	@Before
 	public void setUp() {
 		userRepo = mock(UserRepository.class);
-		controller = new UserApiController(userRepo, null, null);
+		controller = new UserApiController(userRepo, null, null); 
 	}
 
 	@Test

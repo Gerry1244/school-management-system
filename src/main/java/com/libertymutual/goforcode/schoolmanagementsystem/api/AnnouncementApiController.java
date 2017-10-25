@@ -49,7 +49,7 @@ public class AnnouncementApiController {
 	@ApiOperation(value = "Create a new announcement.")
 	@PostMapping("")
 	public Announcement create(@RequestBody Announcement announcement) {
-		return announcementRepo.save(announcement);
+		return announcementRepo.save(announcement);  
 	}
 	
 	@ApiOperation(value = "Delete an announcement.")

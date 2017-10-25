@@ -94,7 +94,7 @@ public class AnnouncementApiTests {
 			when(announcementRepo.save(announcement)).thenReturn(announcement); 
 					
 			//act
-			Announcement actual = controller.update(announcement, 1L); 
+			Announcement actual = controller.update(announcement, 1L);   
 					
 			//assert
 			assertThat(announcement).isSameAs(actual); 
