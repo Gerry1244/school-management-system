@@ -5,10 +5,12 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 public class StudentFullDto {
 
 	private Student student;
+	private Long teacherId;
 	
 	
-	public StudentFullDto(Student student) {
+	public StudentFullDto(Student student, Long teacherId) {
 		this.student = student;
+		this.teacherId = teacherId;
 	}
 	
 	
@@ -38,6 +40,16 @@ public class StudentFullDto {
 	
 	public int getGradeLevel() {
 		return student.getGradeLevel();
+	}
+
+
+	public Long getTeacherId() {
+		return teacherId;
+	}
+
+
+	public void setTeacherId(Long teacherId) {
+		this.teacherId = teacherId;
 	}
 	
 }

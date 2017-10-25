@@ -27,6 +27,8 @@ import com.libertymutual.goforcode.schoolmanagementsystem.repositories.Assignmen
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.services.EmailApiService;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,14 +43,17 @@ public class TeacherApiController {
 	private StudentRepository studentRepo;
 	private PasswordEncoder encoder;
 	private UserRepository userRepo;
+	private EmailApiService emailService;
 
 	public TeacherApiController(TeacherRepository teacherRepo, AssignmentRepository assignmentRepo,
-			StudentRepository studentRepo, PasswordEncoder encoder, UserRepository userRepo) {
+			StudentRepository studentRepo, PasswordEncoder encoder, UserRepository userRepo,
+			EmailApiService emailService) {
 		this.teacherRepo = teacherRepo;
 		this.assignmentRepo = assignmentRepo;
 		this.studentRepo = studentRepo;
 		this.encoder = encoder;
 		this.userRepo = userRepo;
+		this.emailService = emailService;
 	}
 
 	@ApiOperation(value = "Get a specific teacher by id including password.")
@@ -80,7 +85,7 @@ public class TeacherApiController {
 	}
 	
 
-	@ApiOperation(value = "Create a new teacher.")
+	@ApiOperation(value = "Create a new teacher and send confirmation email to teacher email address.")
 	@PostMapping("teachers")
 	public TeacherDto create(@RequestBody Teacher teacher, HttpServletResponse response) {
 		try {
@@ -88,10 +93,19 @@ public class TeacherApiController {
 			if (existingTeacher == null && teacher.getRoleName().equals("TEACHER")) {
 				teacher.setPassword(encoder.encode(teacher.getPassword()));
 				teacherRepo.save(teacher);
+
+				try {
+					emailService.sendSimpleMessage(teacher.getEmail());
+
+				} catch (UnirestException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new TeacherDto(teacher);
 			}
 			System.err.println("Teacher already exists with the the email: " + teacher.getEmail());
-			response.setStatus(400);
+			response.setStatus(409);
 			return null;
 
 		} catch (DataIntegrityViolationException dive) {

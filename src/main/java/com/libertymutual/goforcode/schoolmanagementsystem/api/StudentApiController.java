@@ -29,6 +29,8 @@ import com.libertymutual.goforcode.schoolmanagementsystem.repositories.GradeRepo
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.services.EmailApiService;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,15 +46,18 @@ public class StudentApiController {
 	private AssignmentRepository assignmentRepo;
 	private PasswordEncoder encoder;
 	private UserRepository userRepo;
+	private EmailApiService emailService;
 
 	public StudentApiController(StudentRepository studentRepo, TeacherRepository teacherRepo, GradeRepository gradeRepo,
-			AssignmentRepository assignmentRepo, PasswordEncoder encoder, UserRepository userRepo) {
+			AssignmentRepository assignmentRepo, PasswordEncoder encoder, UserRepository userRepo,
+			EmailApiService emailService) {
 		this.studentRepo = studentRepo;
 		this.teacherRepo = teacherRepo;
 		this.gradeRepo = gradeRepo;
 		this.assignmentRepo = assignmentRepo;
 		this.encoder = encoder;
 		this.userRepo = userRepo;
+		this.emailService = emailService;
 	}
 
 	@ApiOperation(value = "Get a specific student by id including password.")
@@ -60,16 +65,17 @@ public class StudentApiController {
 	public StudentFullDto getOne(@PathVariable long id) {
 		try {
 			Student student = studentRepo.findOne(id);
-			return new StudentFullDto(student);
+			Long teacherId = student.getTeacher().getId();
+			return new StudentFullDto(student, teacherId);
 		} catch (EmptyResultDataAccessException erdae) {
 			System.err.println("Student id: " + id + " not found. Error: " + erdae);
 			return null; 
 		}
 	}
-	
-	@ApiOperation(value = "Create a new student. The ID in the post mapping refers to the teacher being associate with the student.")
-	@PostMapping({"students/{id}", "teachers/{id}/students"})
-	public StudentDto createAndAssociateTeacher(@RequestBody Student student, @PathVariable long id, HttpServletResponse response) {
+
+	@ApiOperation(value = "Create a new student and send confirmation email to student email address. This also associated the student with passed in teacher id")
+	@PostMapping({ "students/{id}", "teachers/{id}/students" })
+	public StudentDto create(@RequestBody Student student, @PathVariable long id, HttpServletResponse response) {
 		try {
 			Teacher teacher = teacherRepo.findOne(id);
 			User existingStudent = userRepo.findByEmail(student.getEmail());
@@ -77,20 +83,28 @@ public class StudentApiController {
 				student.setPassword(encoder.encode(student.getPassword()));
 				student.setTeacher(teacher);
 				studentRepo.save(student);
+
+				try {
+					emailService.sendSimpleMessage(student.getEmail());
+					System.out.println(student.getEmail());
+				} catch (UnirestException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new StudentDto(student);
 			} else if (existingStudent != null) {
 				System.err.println("Student already exists with the the email: " + student.getEmail());
-				response.setStatus(400);
-				return null; 
-			}		
-			else
+				response.setStatus(409);
+				return null;
+			} else
 				return null;
 		} catch (DataIntegrityViolationException dive) {
 			System.err.println("Student in request body was not valid: " + dive);
 			return null;  
 		}
 	}
-	
+
 	@ApiOperation(value = "Delete a student.")
 	@DeleteMapping("students/{id}")
 	public StudentDto delete(@PathVariable long id) {
@@ -113,8 +127,6 @@ public class StudentApiController {
 		}
 	}
 
-	
-
 	@ApiOperation(value = "Get a list of all of the students.")
 	@GetMapping("students")
 	public List<StudentDto> getAll() {
@@ -131,11 +143,15 @@ public class StudentApiController {
 		return null;
 	}
 
-	
-	@ApiOperation(value = "Associate an existing student to a teacher.")
-	@PutMapping({"students/{id}/teachers/{teacherId}", "teacher/{teacherId}/student/{id}/teachers"})
-	public StudentDto associateAnExistingStudentToTeacher(@RequestBody Student student, @PathVariable long id,
-			@PathVariable long teacherId) {
+	@ApiOperation(value = "Update a student")
+	@PutMapping({ "students/{id}/teachers/{teacherId}", "teachers/{teacherId}/students/{id}" })
+	public StudentDto update(@RequestBody Student student, @PathVariable long id, @PathVariable long teacherId) {
+		String submittedPassword = student.getPassword();
+		String databasePassword = studentRepo.findOne(id).getPassword();
+		if (!submittedPassword.equals(databasePassword)) {
+			String encodedPassword = encoder.encode(submittedPassword);
+			student.setPassword(encodedPassword);
+		}
 		try {
 			Teacher teacher = teacherRepo.findOne(teacherId);
 			if (teacher != null) {
@@ -152,31 +168,6 @@ public class StudentApiController {
 			return null;
 		}
 	}
-  
-	
-
-	@ApiOperation(value = "Update a student.")
-	@PutMapping("students/{id}")
-	public StudentDto update(@RequestBody Student student, @PathVariable long id) {
-		String submittedPassword = student.getPassword();
-		String databasePassword = studentRepo.findOne(id).getPassword();
-		if (!submittedPassword.equals(databasePassword)) {
-			String encodedPassword = encoder.encode(submittedPassword);
-			student.setPassword(encodedPassword);
-		}
-		try {
-			student.setId(id);
-			studentRepo.save(student);
-			return new StudentDto(student);
-		} catch (EmptyResultDataAccessException erdae) {
-			System.err.println("Student id: " + id + " not found. Error: " + erdae);
-			return null;
-		} catch (DataIntegrityViolationException dive) {
-			System.err.println("Student in request body was not valid: " + dive);
-			return null;
-		}
-	}
-	
 	@ApiOperation(value = "Get a list of students assigned to a particular assignment, by assignment Id.")
 	@GetMapping("assignments/{id}/students")
 	public List<StudentDto> getAllStudentsByAssignment(@PathVariable long id) {

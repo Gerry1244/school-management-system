@@ -34,15 +34,13 @@ public class Grade {
 	
 	public Grade() {}
 	
-	
-	
 	public Grade(String letterGradeValue) {
 		this.letterGradeValue = letterGradeValue;
 	}
 	
-	public Grade(Long id, String letterGradeValue) {
-		this.id = id;
+	public Grade(String letterGradeValue, String comment) {
 		this.letterGradeValue = letterGradeValue;
+		this.comment = comment;
 	}
 
 	public Long getId() {
