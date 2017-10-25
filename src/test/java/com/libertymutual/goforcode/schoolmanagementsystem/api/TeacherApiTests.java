@@ -23,6 +23,7 @@ import com.libertymutual.goforcode.schoolmanagementsystem.repositories.Assignmen
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.UserRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.services.EmailApiService;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -33,6 +34,7 @@ public class TeacherApiTests {
 	private StudentRepository studentRepository;
 	private PasswordEncoder encoder;
 	private UserRepository userRepo;
+	private EmailApiService emailService;
 	private long id;
 
 	@Before
@@ -42,7 +44,8 @@ public class TeacherApiTests {
 		assignmentRepository = mock(AssignmentRepository.class);
 		studentRepository = mock(StudentRepository.class);
 		encoder = mock(PasswordEncoder.class);
-		controller = new TeacherApiController(teacherRepo, assignmentRepository, studentRepository, encoder, userRepo);
+		emailService = mock(EmailApiService.class);
+		controller = new TeacherApiController(teacherRepo, assignmentRepository, studentRepository, encoder, userRepo, emailService);
 	}
 	
 	@Test

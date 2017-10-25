@@ -23,17 +23,20 @@ import com.libertymutual.goforcode.schoolmanagementsystem.models.Student;
 import com.libertymutual.goforcode.schoolmanagementsystem.models.Teacher;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.StudentRepository;
 import com.libertymutual.goforcode.schoolmanagementsystem.repositories.TeacherRepository;
+import com.libertymutual.goforcode.schoolmanagementsystem.services.EmailApiService;
 
 public class StudentApiTests {
 	private StudentRepository studentRepo;
 	private StudentApiController controller;
 	private TeacherRepository teacherRepo;
+	private EmailApiService emailService;;
 
 	@Before
 	public void setUp() {
 		studentRepo = mock(StudentRepository.class);
 		teacherRepo = mock(TeacherRepository.class);
-		controller = new StudentApiController(studentRepo, teacherRepo, null, null, null, null);
+		emailService = mock(EmailApiService.class);
+		controller = new StudentApiController(studentRepo, teacherRepo, null, null, null, null, emailService);
 	}
 
 	@Test
@@ -62,7 +65,7 @@ public class StudentApiTests {
 		// act
 		long id = 1L;
 		HttpServletResponse response = null;
-		StudentDto actual = controller.createAndAssociateTeacher(student, id, response);
+		StudentDto actual = controller.create(student, id, response);
 
 		// assert
 		//assertThat(student).get(actual);
@@ -111,9 +114,11 @@ public class StudentApiTests {
 		// Arrange
 		Student student = new Student();
 		student.setId(1L);
+		Teacher teacher = new Teacher();
+		teacher.setId(3L);
 		when(studentRepo.getOne(1L)).thenReturn(student);
 		// Act
-		StudentDto actual = controller.update(student, 1L);
+		StudentDto actual = controller.update(student, 1L, 3L);
 
 		// Assert
 		verify(studentRepo).save(student);
@@ -128,7 +133,7 @@ public class StudentApiTests {
 
 		// act
 
-		StudentDto actual = controller.update(student, 1L);
+		StudentDto actual = controller.update(student, 1L, 3L);
 
 		// assert
 		assertThat(actual).isNull();
@@ -144,25 +149,12 @@ public class StudentApiTests {
 
 		// act
 
-		StudentDto actual = controller.update(student, 1L);
+		StudentDto actual = controller.update(student, 1L, 3L);
 
 		// assert
 		assertThat(actual).isNull();
 
 	}
 
-	@Test
-	public void test_an_existing_student_is_associated_to_a_teacher() {
-		// arrange
-		Student student = new Student();
-		Teacher teacher = new Teacher();
-		when(studentRepo.findOne(1L)).thenReturn(student);
-
-		// Act
-		StudentDto actual = controller.associateAnExistingStudentToTeacher(student, 1L, 2L);
-
-		// Assert
-		assertThat(actual).isNull();
-	}
-
+	
 }

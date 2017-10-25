@@ -35,7 +35,8 @@ public class GradeApiTests {
 	@Test
 	public void test_get_a_single_grade_by_id() {
 		//Arrange
-		Grade grade = new Grade(1L,"letterGradeValue");
+		Grade grade = new Grade("letterGradeValue");
+		grade.setId(1L);
 		when(gradeRepo.findOne(1L)).thenReturn(grade);
 		
 		//Act
@@ -50,7 +51,8 @@ public class GradeApiTests {
 	@Test
 	public void test_when_grade_returns_null() {
 		//Arrange
-		Grade grade = new Grade(1L,"letterGradeValue");
+		Grade grade = new Grade("letterGradeValue");
+		grade.setId(1L);
 		when(gradeRepo.findOne(1L)).thenReturn(grade);
 		
 		//Act
